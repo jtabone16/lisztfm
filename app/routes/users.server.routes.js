@@ -35,6 +35,26 @@ module.exports = function(app) {
 	app.route('/auth/twitter').get(passport.authenticate('twitter'));
 	app.route('/auth/twitter/callback').get(users.oauthCallback('twitter'));
 
+	// Setting the spotify oauth routes
+	//https://developer.spotify.com/web-api/using-scopes/ for scope info
+	app.route('/auth/spotify').get(passport.authenticate('spotify',{
+		scope: [
+			'playlist-read-collaborative',
+			'playlist-modify-public',
+			'playlist-read-private',
+			'playlist-modify-private',
+			'user-follow-read',
+			'user-read-email',
+			'user-library-read'
+		],
+		showDialog: true
+	}));
+
+	app.route('/auth/spotify/callback').get(users.oauthCallback('spotify'),
+		function(req, res){
+			res.redirect('/playlists');
+		});
+
 	// Setting the google oauth routes
 	app.route('/auth/google').get(passport.authenticate('google', {
 		scope: [

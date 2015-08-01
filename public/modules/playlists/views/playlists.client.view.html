@@ -1,3 +1,9 @@
 <section data-ng-controller="PlaylistsController">
-	This is the Playlists view
+	<button type="button" class="btn btn-default" aria-label="Left Align" ng-click="getPlaylists()">
+  	<span aria-hidden="true">Import playlists</span>
+	</button>
+
+	<button ng-show="playlistsReady" type="button" class="btn btn-default" aria-label="Left Align" ng-click="getTracks()">
+		<span aria-hidden="true">Import tracks</span>
+	</button>
 </section>

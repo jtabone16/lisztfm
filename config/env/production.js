@@ -10,11 +10,11 @@ module.exports = {
 			],
 			js: [
 				'public/lib/angular/angular.min.js',
-				'public/lib/angular-resource/angular-resource.js', 
-				'public/lib/angular-cookies/angular-cookies.js', 
-				'public/lib/angular-animate/angular-animate.js', 
-				'public/lib/angular-touch/angular-touch.js', 
-				'public/lib/angular-sanitize/angular-sanitize.js', 
+				'public/lib/angular-resource/angular-resource.js',
+				'public/lib/angular-cookies/angular-cookies.js',
+				'public/lib/angular-animate/angular-animate.js',
+				'public/lib/angular-touch/angular-touch.js',
+				'public/lib/angular-sanitize/angular-sanitize.js',
 				'public/lib/angular-ui-router/release/angular-ui-router.min.js',
 				'public/lib/angular-ui-utils/ui-utils.min.js',
 				'public/lib/angular-bootstrap/ui-bootstrap-tpls.min.js'
@@ -32,6 +32,11 @@ module.exports = {
 		clientID: process.env.TWITTER_KEY || 'CONSUMER_KEY',
 		clientSecret: process.env.TWITTER_SECRET || 'CONSUMER_SECRET',
 		callbackURL: '/auth/twitter/callback'
+	},
+	spotify: {
+		clientID: process.env.SPOTIFY_KEY || 'f60628f0f91a4005ba72d8aeb5b6380a',
+		clientSecret: process.env.SPOTIFY_SECRET || '334e23466d314be6b09de21d38fbb060',
+		callbackURL: '/auth/spotify/callback'
 	},
 	google: {
 		clientID: process.env.GOOGLE_ID || 'APP_ID',

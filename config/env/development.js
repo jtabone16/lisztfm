@@ -15,6 +15,11 @@ module.exports = {
 		clientSecret: process.env.TWITTER_SECRET || 'CONSUMER_SECRET',
 		callbackURL: '/auth/twitter/callback'
 	},
+	spotify: {
+		clientID: 'f60628f0f91a4005ba72d8aeb5b6380a',
+		clientSecret:'334e23466d314be6b09de21d38fbb060',
+		callbackURL: '/auth/spotify/callback'
+	},
 	google: {
 		clientID: process.env.GOOGLE_ID || 'APP_ID',
 		clientSecret: process.env.GOOGLE_SECRET || 'APP_SECRET',
