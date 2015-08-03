@@ -50,6 +50,11 @@ module.exports = function(app) {
 		showDialog: true
 	}));
 
+	app.route('/user/playlists/add').post(users.addPlaylists);
+	app.route('/user/playlist/tracks/add').post(users.addTracks);
+	app.route('/user/check').get(users.checkUser);
+
+
 	app.route('/auth/spotify/callback').get(users.oauthCallback('spotify'),
 		function(req, res){
 			res.redirect('/playlists');

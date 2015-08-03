@@ -5,12 +5,33 @@ angular.module('playlists').controller('PlaylistsController', ['$scope', '$http'
 
 		$scope.playlists = [];
 		$scope.playlistsReady = false;
+		$scope.currentTracks = [];
+		$scope.currentPlaylist = {
+			'name': '',
+			'tracks': $scope.currentTracks,
+		};
 
 
 		// $scope.remaining_playlists = 0;  TODO: get playlists if user has more than 50
 
 
 		//TODO: if token expires, use refresh token?
+
+
+		//Get playlists for current user from DB first, the if needed, make a request from Spotify
+		$http.get('/user/check')
+			.success(function(response) {
+				if (response.length === 0){
+					$scope.getPlaylists();
+				}
+				else{
+					$scope.playlists = response;
+					// $scope.playlistsReady = true;
+				}
+			}).error(function (err){
+				console.log('User cannot be found. Try logging in.');
+			});
+
 
 		$scope.getPlaylists = function(){
 			var req = {
@@ -25,42 +46,36 @@ angular.module('playlists').controller('PlaylistsController', ['$scope', '$http'
 			$http(req).
 				success(function(res){
 					$scope.playlists = res.items;
-					$http.post('/playlist/add', $scope.playlists);
+					$http.post('/user/playlists/add', $scope.playlists);
 					$scope.playlistsReady = true;
-
-
-
 				});
 
 		};
 
-		$scope.getTracks = function(){
+		$scope.getTracks = function(plist){
 
-			//NOTE: USED TO TEST IF TRACKS ARE BEING ADDED FOR FIRST playlist
-			// $scope.postTracks($scope.playlists[0].tracks.href);
-
-			for (var p in $scope.playlists){
-				var tracks_link = $scope.playlists[p].tracks.href;
-				var tracks_total = $scope.playlists[p].tracks.total;
-				var numRequests = 1;
-
-				if (tracks_total > 100){
-					numRequests = Math.ceil(tracks_total/100);
-				}
+			var tracks_link = plist.tracks.href;
+			var tracks_total = plist.tracks.total;
+			var numRequests = 1;
+			$scope.currentPlaylist.name = plist.name;
 
 
-				if (numRequests === 1){ //100 tracks or less
-					$scope.postTracks(tracks_link);
-				}
-
-				else{
-					$scope.getMoreTracks(tracks_link, numRequests);
-				}
+			if (tracks_total > 100){
+				numRequests = Math.ceil(tracks_total/100);
 			}
+
+			if (numRequests === 1){ //100 tracks or less
+				$scope.postTracks(plist.id, tracks_link);
+			}
+
+			else{
+				$scope.getMoreTracks(plist.id, tracks_link, numRequests);
+			}
+
 
 		};
 
-		$scope.postTracks = function(tracks_link) {
+		$scope.postTracks = function(playlist_id, tracks_link) {
 			var req = {
 				 method: 'GET',
 				 url: tracks_link,
@@ -86,6 +101,7 @@ angular.module('playlists').controller('PlaylistsController', ['$scope', '$http'
 						}
 
 						var track = {
+							'playlist_id': playlist_id,
 							'added': tracks[i].added_at,
 							'added_by': added_by,
 							'name': tracks[i].track.name,
@@ -99,14 +115,15 @@ angular.module('playlists').controller('PlaylistsController', ['$scope', '$http'
 						};
 
 						formattedTracks.push(track);
+						$scope.currentTracks.push(track);
 					}
-					$http.post('/playlist/add/tracks', formattedTracks);
+					$http.post('/user/playlist/tracks/add', formattedTracks);
 
 				});
 
 		};
 
-		$scope.getMoreTracks = function(tracks_link, numRequests){
+		$scope.getMoreTracks = function(playlist_id, tracks_link, numRequests){
 			var offset = 0;
 
 			for (var i = 0; i < numRequests; i++){
@@ -115,22 +132,22 @@ angular.module('playlists').controller('PlaylistsController', ['$scope', '$http'
 				}
 				var offsetString = offset.toString();
 
-				var req = {
+				var request = {
 					 method: 'GET',
 					 url: tracks_link + '?offset=' + offsetString,
 					 headers: {
 						 'Authorization': 'Bearer ' + $window.user.providerData.token
 					 },
 				};
-				$scope.postMoreTracks(req);
+				$scope.postMoreTracks(playlist_id, request);
 			}
 
 
 
 		};
 
-		$scope.postMoreTracks = function(req) {
-			$http(req).
+		$scope.postMoreTracks = function(playlist_id, request) {
+			$http(request).
 				success(function(res){
 					console.log(res);
 					var tracks = res.items;
@@ -145,6 +162,7 @@ angular.module('playlists').controller('PlaylistsController', ['$scope', '$http'
 							added_by = tracks[i].added_by.id;
 						}
 						var track = {
+							'playlist_id': playlist_id,
 							'added': tracks[i].added_at,
 							'added_by': added_by,
 							'name': tracks[i].track.name,
@@ -158,8 +176,9 @@ angular.module('playlists').controller('PlaylistsController', ['$scope', '$http'
 						};
 
 						formattedTracks.push(track);
+						$scope.currentTracks.push(track);
 					}
-					$http.post('/playlist/add/tracks', formattedTracks);
+					$http.post('/user/playlist/tracks/add', formattedTracks);
 
 				});
 
