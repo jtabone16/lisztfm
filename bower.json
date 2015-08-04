@@ -19,6 +19,6 @@
     "jquery": "~2.1.4",
     "angular-spotify": "~1.0.0",
     "angular-smart-table": "~2.1.1",
-    "angular-media-player": "~0.5.8"
+    "angular-soundmanager2": "~0.5.6"
   }
 }

@@ -1,7 +1,7 @@
 'use strict';
 
 // Configuring the Playlists module
-angular.module('playlists', ['spotify','smart-table', 'mediaPlayer']).run(function( ){
+angular.module('playlists', ['spotify','smart-table', 'angularSoundManager']).run(function( ){
   //Tests for alertify
   // Alertify.success('Successfully submitted activity!');
   // Alertify.error('Activity not submitted...contact support!');

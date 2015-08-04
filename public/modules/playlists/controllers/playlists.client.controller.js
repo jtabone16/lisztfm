@@ -104,10 +104,10 @@ angular.module('playlists').controller('PlaylistsController', ['$scope', '$http'
 					var tracksResponse = res.items;
 					var el_tracks = [];
 					for (var i in tracksResponse){
-						var artists = [];
+						var artist = [];
 						var added_by = '';
 						for (var x in tracksResponse[i].track.artists){
-					      artists.push(tracksResponse[i].track.artists[x].name);
+					      artist.push(tracksResponse[i].track.artists[x].name);
 					    }
 
 						if (tracksResponse[i].added_by !== null){
@@ -118,14 +118,14 @@ angular.module('playlists').controller('PlaylistsController', ['$scope', '$http'
 							'playlist_id': playlist_id,
 							'added': tracksResponse[i].added_at,
 							'added_by': added_by,
-							'name': tracksResponse[i].track.name,
+							'title': tracksResponse[i].track.name,
 							'popularity': tracksResponse[i].track.popularity,
-							'preview': tracksResponse[i].track.preview_url,
+							'url': tracksResponse[i].track.preview_url,
 							'id': tracksResponse[i].track.id,
 							'explicit': tracksResponse[i].track.explicit,
 							'duration': tracksResponse[i].track.duration_ms,
 							'album': tracksResponse[i].track.album.name,
-							'artists': artists,
+							'artist': artist.join(),
 						};
 
 						el_tracks.push(track);

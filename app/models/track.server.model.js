@@ -13,15 +13,13 @@ var TrackSchema = new Schema({
 	playlist_id: String,
 	added: Date,
 	added_by: String,
-	name: String,
+	title: String,
 	popularity: Number,
-	preview: String,
+	url: String,
 	id: String,
 	explicit: Boolean,
 	duration: Number,
-	artists: [{
-		type: String
-	}],
+	artist:String,
 	album: String
 });
 

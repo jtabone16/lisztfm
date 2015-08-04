@@ -91,7 +91,7 @@ var saveTrack = function(track) {
       console.log('Error adding track');
     }
 		else {
-      console.log('Success adding track: ' + track.name + ' by ' + track.artists.join());
+      console.log('Success adding track: ' + track.title + ' by ' + track.artist);
     }
   });
 
@@ -104,10 +104,10 @@ var saveTrack = function(track) {
 				playlist.tracks.push(track);
 				playlist.save(function(err){
 					if (err){
-						console.log('Error adding ' + track.name + ' by ' + track.artists.join()+ ' to ' + playlist.name);
+						console.log('Error adding ' + track.title + ' by ' + track.artist + ' to ' + playlist.name);
 					}
 					else{
-						console.log('Success adding ' + track.name + ' by ' + track.artists.join()+ ' to ' + playlist.name);
+						console.log('Success adding ' + track.title + ' by ' + track.artist + ' to ' + playlist.name);
 					}
 				});
 			}
