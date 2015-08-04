@@ -1,0 +1,12 @@
+td { break-word: word-wrap; }
+
+.st-selected{
+  background: #2d6 !important;
+  color: #fff;
+}
+
+table
+{
+    table-layout: fixed;
+    max-width: 100%;
+}

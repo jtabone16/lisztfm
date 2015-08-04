@@ -82,12 +82,6 @@ var UserSchema = new Schema({
 		type: Date,
 		default: Date.now
 	},
-	playlists: [{
-		playlist: {
-			type: Schema.ObjectId,
-			ref: 'Playlist'
-		}
-	}],
 	/* For reset password */
 	resetPasswordToken: {
 		type: String

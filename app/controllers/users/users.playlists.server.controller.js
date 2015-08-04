@@ -7,6 +7,7 @@ var _ = require('lodash'),
 	errorHandler = require('../errors.server.controller.js'),
 	mongoose = require('mongoose'),
 	passport = require('passport'),
+	async = require('async'),
 	User = mongoose.model('User'),
   Playlist = mongoose.model('Playlist'),
 	Track = mongoose.model('Track');
@@ -22,17 +23,6 @@ var savePlaylist = function(user, plist) {
       console.log('Success adding playlist');
     }
   });
-
-  user.playlists.push(plist);
-
-  user.save(function(err) {
-    if (err) {
-      //TODO: Add proper error/success handling messages
-      console.log('Error adding playlist to user');
-    } else {
-      console.log('Success adding playlist to user');
-    }
-  });
 };
 
 exports.checkUser = function(req, res){
@@ -43,16 +33,27 @@ exports.checkUser = function(req, res){
 			console.log('Cannot find user. Creating user and adding playlists for user.');
 		}
 		else{
-			res.jsonp(found_user.playlists);
+			Playlist.find({'users': found_user},
+				function(err, plists){
+						if (err){
+							console.log('Cannot find playlists for user');
+						}
+						else{
+							res.jsonp(plists);
+						}
+
+				});
 		}
 	});
 };
 
-//TODO: check if playlists and tracks are in DB already...
+//TODO: check if playlists and tracks are in DB already.
+
 
 exports.addPlaylists = function (req, res){
 
   var playlists = req.body;
+	var savedPlaylists = [];
 
   for (var i in playlists){
 
@@ -69,11 +70,16 @@ exports.addPlaylists = function (req, res){
     playlist.owner = playlists[i].owner.id;
     playlist.tracks_link = playlists[i].tracks.href;
     playlist.track_total = playlists[i].tracks.total;
-    playlist.collab = playlists[i].collaborative;
+    playlist.collaborative = playlists[i].collaborative;
     playlist.tracks = tracks;
 
+		savedPlaylists.push(playlist);
     savePlaylist(req.user, playlist, res);
   }
+
+	res.jsonp(savedPlaylists);
+
+
 };
 
 
@@ -111,10 +117,14 @@ var saveTrack = function(track) {
 
 exports.addTracks = function(req, res) {
   var tracks = req.body;
+	var savedTracks = [];
 
   for (var x in tracks) {
     var track = new Track(tracks[x]);
+		savedTracks.push(track);
     saveTrack(track);
   }
+
+	res.jsonp(savedTracks);
 
 };

@@ -10,11 +10,11 @@ var mongoose = require('mongoose'),
  * Playlist Schema
  */
 var PlaylistSchema = new Schema({
-	users: {
-		type: [Schema.ObjectId],
+	users: [{
+		type: Schema.ObjectId,
 		ref: 'Users'
-	},
-	collab: Boolean,
+	}],
+	collaborative: Boolean,
 	id: String,
 	name: String,
 	owner: String,
@@ -23,10 +23,10 @@ var PlaylistSchema = new Schema({
 	},
 	tracks_link: String,
 	track_total: Number,
-	tracks: {
-		type: [Schema.ObjectId],
-		ref: 'Tracks'
-	},
+	tracks: [{
+		type: Schema.ObjectId,
+		ref: 'Track'
+	}],
 });
 
 mongoose.model('Playlist', PlaylistSchema);
