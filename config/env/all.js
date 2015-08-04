@@ -27,7 +27,8 @@ module.exports = {
 				'public/lib/angular-ui-utils/ui-utils.js',
 				'public/lib/angular-bootstrap/ui-bootstrap-tpls.js',
 				'public/lib/angular-spotify/src/angular-spotify.js',
-				'public/lib/angular-smart-table/dist/smart-table.js'
+				'public/lib/angular-smart-table/dist/smart-table.js',
+				'public/lib/angular-media-player/dist/angular-media-player.js'
 			]
 		},
 		css: [

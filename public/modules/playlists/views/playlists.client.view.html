@@ -20,11 +20,11 @@
 			</div>
 			<div class="row">
 				<div class="col-xs-12">
-					<table st-safe-src="formattedTracks" st-table="displayedTracks" ng-show="formattedTracks.length > 0" class="table table-striped table-hover">
+					<table st-safe-src="tracks" st-table="displayedTracks" ng-show="tracks.length > 0" class="table table-striped table-hover">
 						<h4>{{currentPlaylist}} </h4>
 						<thead>
 							<tr>
-								<!-- <th>  </th> -->
+								<th> Preview </th>
 								<th st-sort="name">Song</th>
 								<th st-sort="artists.join()">Artist</th>
 								<th st-sort="added_by">Added by</th>
@@ -36,7 +36,7 @@
 						</thead>
 						<tbody>
 							<tr st-select-row="track" ng-repeat="track in displayedTracks">
-								<!-- <td> <i class="glyphicon glyphicon-play"> </i> </td> -->
+								<td> <a class="glyphicon glyphicon-play" href="{{track.preview}}" target="_self"> </a> </td>
 								<td>{{track.name}}</td>
 								<td>{{track.artists.join()}}</td>
 								<td>{{track.added_by}}</td>

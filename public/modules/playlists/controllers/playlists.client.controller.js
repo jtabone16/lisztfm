@@ -6,7 +6,7 @@ angular.module('playlists').controller('PlaylistsController', ['$scope', '$http'
 		$scope.playlists = [];
 		$scope.playlistsReady = false;
 		$scope.currentPlaylist = '';
-		$scope.formattedTracks = [];
+		$scope.tracks = [];
 
 		// $scope.remaining_playlists = 0;  TODO: get playlists if user has more than 50
 
@@ -60,7 +60,7 @@ angular.module('playlists').controller('PlaylistsController', ['$scope', '$http'
 				var tracks_total = plist.track_total;
 				var numRequests = 1;
 				$scope.currentPlaylist = plist.name;
-				$scope.formattedTracks = [];
+				$scope.tracks = [];
 
 
 				if (tracks_total > 100){
@@ -101,38 +101,38 @@ angular.module('playlists').controller('PlaylistsController', ['$scope', '$http'
 
 			$http(req).
 				success(function(res){
-					var tracks = res.items;
+					var tracksResponse = res.items;
 					var el_tracks = [];
-					for (var i in tracks){
+					for (var i in tracksResponse){
 						var artists = [];
 						var added_by = '';
-						for (var x in tracks[i].track.artists){
-					      artists.push(tracks[i].track.artists[x].name);
+						for (var x in tracksResponse[i].track.artists){
+					      artists.push(tracksResponse[i].track.artists[x].name);
 					    }
 
-						if (tracks[i].added_by !== null){
-							added_by = tracks[i].added_by.id;
+						if (tracksResponse[i].added_by !== null){
+							added_by = tracksResponse[i].added_by.id;
 						}
 
 						var track = {
 							'playlist_id': playlist_id,
-							'added': tracks[i].added_at,
+							'added': tracksResponse[i].added_at,
 							'added_by': added_by,
-							'name': tracks[i].track.name,
-							'popularity': tracks[i].track.popularity,
-							'preview': tracks[i].track.preview_url,
-							'id': tracks[i].track.id,
-							'explicit': tracks[i].track.explicit,
-							'duration': tracks[i].track.duration_ms,
-							'album': tracks[i].track.album.name,
+							'name': tracksResponse[i].track.name,
+							'popularity': tracksResponse[i].track.popularity,
+							'preview': tracksResponse[i].track.preview_url,
+							'id': tracksResponse[i].track.id,
+							'explicit': tracksResponse[i].track.explicit,
+							'duration': tracksResponse[i].track.duration_ms,
+							'album': tracksResponse[i].track.album.name,
 							'artists': artists,
 						};
 
 						el_tracks.push(track);
-						$scope.formattedTracks.push(track);
+						$scope.tracks.push(track);
 					}
 
-					$scope.displayedTracks = [].concat($scope.formattedTracks);
+					$scope.displayedTracks = [].concat($scope.tracks);
 
 					$http.post('/user/playlist/tracks/add', el_tracks).
 					success(function(response){

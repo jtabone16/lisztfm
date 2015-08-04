@@ -10,7 +10,7 @@ var mongoose = require('mongoose'),
  * Track Schema
  */
 var TrackSchema = new Schema({
-	playlist_id: String, 
+	playlist_id: String,
 	added: Date,
 	added_by: String,
 	name: String,
