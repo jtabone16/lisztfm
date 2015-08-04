@@ -328,6 +328,16 @@ angular.module('playlists').controller('PlaylistsController', ['$scope', '$http'
 			console.log(track);
 		};
 
+		$scope.changeRating = function(track) {
+			if (track.rating === 2) {
+				track.rating = 0;
+			}
+			else{
+				track.rating++;
+			}
+
+		};
+
 		$scope.getPlaylists = function(){
 			var req = {
 				 method: 'GET' ,
@@ -416,12 +426,13 @@ angular.module('playlists').controller('PlaylistsController', ['$scope', '$http'
 							'added_by': added_by,
 							'title': tracksResponse[i].track.name,
 							'popularity': tracksResponse[i].track.popularity,
-							'preview': tracksResponse[i].track.preview_url,
+							'url': tracksResponse[i].track.preview_url,
 							'id': tracksResponse[i].track.id,
 							'explicit': tracksResponse[i].track.explicit,
 							'duration': tracksResponse[i].track.duration_ms,
 							'album': tracksResponse[i].track.album.name,
 							'artist': artist.join(),
+							'rating': 1
 						};
 
 						el_tracks.push(track);

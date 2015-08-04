@@ -20,7 +20,12 @@ var TrackSchema = new Schema({
 	explicit: Boolean,
 	duration: Number,
 	artist:String,
-	album: String
+	album: String,
+	rating: Number,
+	edited: {
+		type:Boolean,
+		default: false
+	}
 });
 
 mongoose.model('Track', TrackSchema);

@@ -7,6 +7,7 @@ angular.module('playlists').controller('PlaylistsController', ['$scope', '$http'
 		$scope.playlistsReady = false;
 		$scope.currentPlaylist = '';
 		$scope.tracks = [];
+		$scope.tracksToDelete = [];
 
 		// $scope.remaining_playlists = 0;  TODO: get playlists if user has more than 50
 
@@ -30,6 +31,43 @@ angular.module('playlists').controller('PlaylistsController', ['$scope', '$http'
 
 		$scope.trackSelected = function(track){
 			console.log(track);
+		};
+
+		$scope.changeRating = function(track) {
+			if (track.rating === 2) {
+				track.rating = 0;
+			}
+			else{
+				track.rating++;
+			}
+
+			track.edited = true;
+
+		};
+
+		$scope.removeTrack = function(track){
+			var track_uri = 'spotify:track:' + track.id;
+			var found = false;
+
+			for (var i = 0; i < $scope.tracksToDelete.length; i++){
+				if ($scope.tracksToDelete[i].uri === track_uri){
+					found = true;
+					$scope.tracksToDelete.splice(i, 1);
+					console.log('removed from delete list');
+					break;
+				}
+			}
+
+			if (found === false){
+				var trak = {
+					'uri': track_uri,
+				};
+				$scope.tracksToDelete.push(trak);
+				console.log('added to delete list');
+				track.edited = true;
+			}
+
+
 		};
 
 		$scope.getPlaylists = function(){
@@ -61,6 +99,7 @@ angular.module('playlists').controller('PlaylistsController', ['$scope', '$http'
 				var numRequests = 1;
 				$scope.currentPlaylist = plist.name;
 				$scope.tracks = [];
+				$scope.tracksToDelete = [];
 
 
 				if (tracks_total > 100){
@@ -126,6 +165,7 @@ angular.module('playlists').controller('PlaylistsController', ['$scope', '$http'
 							'duration': tracksResponse[i].track.duration_ms,
 							'album': tracksResponse[i].track.album.name,
 							'artist': artist.join(),
+							'rating': 1
 						};
 
 						el_tracks.push(track);
