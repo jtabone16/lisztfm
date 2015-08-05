@@ -10,7 +10,7 @@
   "scripts": {
     "start": "grunt",
     "test": "grunt test",
-    "postinstall": "grunt build & bower install --config.interactive=false"
+    "postinstall": "grunt build && bower install --config.interactive=false"
   },
   "dependencies": {
     "async": "~0.9.0",

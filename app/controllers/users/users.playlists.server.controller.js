@@ -60,13 +60,15 @@ exports.addPlaylists = function (req, res){
     var playlist = new Playlist();
     var tracks = [];
     var users = [];
-		var snapshots = [];
     users.push(req.user);
     playlist.users = users;
     playlist.id = playlists[i].id;
     playlist.name = playlists[i].name;
-    snapshots.push(playlists[i].snapshot_id);
-		playlist.snapshot_id = snapshots;
+		var snap = {
+			'id': playlists[i].snapshot_id,
+			'created': new Date(),
+		};
+		playlist.snapshot_id.push(snap);
     playlist.owner = playlists[i].owner.id;
     playlist.tracks_link = playlists[i].tracks.href;
     playlist.track_total = playlists[i].tracks.total;

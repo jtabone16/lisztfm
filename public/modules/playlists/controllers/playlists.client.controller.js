@@ -112,9 +112,12 @@ angular.module('playlists').controller('PlaylistsController', ['$scope', '$http'
 				success(function (res){
 					$state.reload(); //TODO: create method to delete tracks from playlist rather than adding tracks from playlist again
 					// $scope.getTracks($scope.currentPlaylist);
-					console.log(res);
-					$scope.currentPlaylist.snapshot_id.push(res.snapshot_id); //TODO: save snapshot for playlist in DB
-					console.log('snapshots' + $scope.currentPlaylist.snapshot_id.join(' end '));
+					var snap = {
+						'id': res.snapshot_id,
+						'date': new Date(),
+					};
+					$scope.currentPlaylist.snapshot_id.push(snap); //TODO: save snapshot for playlist in DB
+					console.log($scope.currentPlaylist);
 				}).
 				error(function (res){
 					console.log(res);

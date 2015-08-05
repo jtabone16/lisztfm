@@ -18,9 +18,10 @@ var PlaylistSchema = new Schema({
 	id: String,
 	name: String,
 	owner: String,
-	snapshot_id:{
-		type:[String]
-	},
+	snapshot_id:[{
+		id: String,
+		created: Date
+	}],
 	tracks_link: String,
 	track_total: Number,
 	tracks: [{
