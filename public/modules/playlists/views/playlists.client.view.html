@@ -11,19 +11,22 @@
 							</tr>
 						</thead>
 						<tbody>
-							<tr ng-repeat="plist in playlists" ng-if="plist.collaborative == true" class="data-entry">
-								<td ng-click="getTracks(plist)">{{plist.name}}</td>
+							<tr ng-repeat="plist in playlists" ng-if="plist.owner == currentUser" class="table-menu">
+								<td ng-click="getTracks(plist)">
+									{{plist.name}}
+									<span ng-show="plist.collaborative == true" class="collab_tag"> Collab </span>
+								</td>
 							</tr>
 						</tbody>
 					</table>
 				</div>
 			</div>
 			<div class="row">
-				<div class="col-xs-10">
+				<div class="col-xs-8">
 					<!-- init sound manager! -->
 					<sound-manager></sound-manager>
 					<table st-safe-src="tracks" st-table="displayedTracks" ng-show="tracks.length > 0" class="table table-striped table-hover">
-						<h4>{{currentPlaylist}} </h4>
+						<h4>{{currentPlaylist.name}} </h4>
 						<thead>
 							<tr>
 								<th>Actions <span style="color:#2d6"> * </span></th>
@@ -37,13 +40,14 @@
 							</tr>
 						</thead>
 						<tbody>
-							<tr st-select-row="track" ng-repeat="track in displayedTracks" ng-click="trackSelected(track)">
+							<tr st-select-row="track" ng-repeat="track in displayedTracks" ng-click="trackSelected(track)" class="table-menu">
 								<td>
 									<i class="track-menu-option glyphicon glyphicon-play" music-player="play" add-song="track"></i>
 									<i class="track-menu-option glyphicon glyphicon-pause" pause-music></i>
 									<i class="track-menu-option glyphicon glyphicon-trash" ng-click="removeTrack(track)"> </i>
-									<i class="track-menu-option glyphicon glyphicon-comment"> </i>
+									<!-- <i class="track-menu-option glyphicon glyphicon-comment"> </i> -->
 									<i class="track-menu-option flaticonNormal" ng-click="changeRating(track)" ng-class="{flaticonBad: track.rating == 0, flaticonNormal: track.rating == 1, flaticonGreat: track.rating == 2}"></i>
+									<i class="track-menu-option save-changes glyphicon glyphicon-remove" ng-show="track.edited" ng-class="{'pending_deletion': track.edited}"></i>
 								</td>
 								<td>{{track.title}}</td>
 								<td>{{track.artist}}</td>
@@ -61,8 +65,16 @@
 					</table>
 				</div>
 
-				<div class="col-xs-2">
-
+				<div class="col-xs-4" ng-show="tracksToDelete.length > 0">
+					<div sticky offset="350" class="removing">
+						<div class="playlist_name"> Removing {{tracksToDelete.length}} tracks: </div>
+						<div ng-repeat="track in tracksToDelete">
+							<div class="track_name"> <span style="font-weight:bold;">{{track.title}}</span> by {{track.artist}}</div>
+						</div>
+						<button type="button" class="delete_button btn btn-default" ng-model="deleteTracks" ng-click="deleteTracksNow()"btn-checkbox btn-checkbox-true="1" btn-checkbox-false="0">
+				        Delete Tracks
+				    </button>
+					</div>
 				</div>
 			</div>
 

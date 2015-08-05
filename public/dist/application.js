@@ -4,7 +4,7 @@
 var ApplicationConfiguration = (function() {
 	// Init module configuration options
 	var applicationModuleName = 'lisztfm';
-	var applicationModuleVendorDependencies = ['ngResource', 'ngCookies',  'ngAnimate',  'ngTouch',  'ngSanitize',  'ui.router', 'ui.bootstrap', 'ui.utils', 'spotify', 'smart-table', 'angularSoundManager'];
+	var applicationModuleVendorDependencies = ['ngResource', 'ngCookies',  'ngAnimate',  'ngTouch',  'ngSanitize',  'ui.router', 'ui.bootstrap', 'ui.utils', 'spotify', 'smart-table', 'angularSoundManager', 'sticky'];
 
 	// Add a new vertical module
 	var registerModule = function(moduleName, dependencies) {
@@ -274,7 +274,7 @@ angular.module('core').service('Menus', [
 'use strict';
 
 // Configuring the Playlists module
-angular.module('playlists', ['spotify','smart-table', 'angularSoundManager']).run(function( ){
+angular.module('playlists', ['spotify','smart-table', 'angularSoundManager', 'sticky']).run(function( ){
   //Tests for alertify
   // Alertify.success('Successfully submitted activity!');
   // Alertify.error('Activity not submitted...contact support!');
@@ -303,6 +303,8 @@ angular.module('playlists').controller('PlaylistsController', ['$scope', '$http'
 		$scope.playlistsReady = false;
 		$scope.currentPlaylist = '';
 		$scope.tracks = [];
+		$scope.tracksToDelete = [];
+		$scope.deleteTracks = 0;
 
 		// $scope.remaining_playlists = 0;  TODO: get playlists if user has more than 50
 
@@ -335,6 +337,56 @@ angular.module('playlists').controller('PlaylistsController', ['$scope', '$http'
 			else{
 				track.rating++;
 			}
+		};
+
+		$scope.removeTrack = function(track){
+			var track_uri = 'spotify:track:' + track.id;
+			var found = false;
+
+			for (var i = 0; i < $scope.tracksToDelete.length; i++){
+				if ($scope.tracksToDelete[i].uri === track_uri){
+					found = true;
+					$scope.tracksToDelete.splice(i, 1);
+					track.edited = false;
+					break;
+				}
+			}
+
+			if (found === false){
+				var trak = {
+					'uri': track_uri,
+					'artist': track.artist,
+					'title': track.title,
+				};
+				$scope.tracksToDelete.push(trak);
+				track.edited = true;
+			}
+		};
+
+		$scope.deleteTracksNow = function(){
+			var req = {
+				 method: 'DELETE',
+				 url: 'https://api.spotify.com/v1/users/' + $window.user.username + '/playlists/' + $scope.tracks[0].playlist_id + '/tracks',
+				 headers: {
+					 'Authorization': 'Bearer ' + $window.user.providerData.token,
+					 'Content-Type': 'application/json'
+				 },
+				 data: {
+					 'tracks' : $scope.tracksToDelete
+				 }
+			};
+
+			console.log(req);
+
+			$http(req).
+				success(function (res){
+					$scope.getTracks($scope.currentPlaylist);
+					//TODO: save snapshot for playlist AND show all playlists OWNED by the user
+					console.log(res);
+				}).
+				error(function (res){
+					console.log(res);
+				});
 
 		};
 
@@ -353,7 +405,7 @@ angular.module('playlists').controller('PlaylistsController', ['$scope', '$http'
 					$http.post('/user/playlists/add', res.items)
 					.success(function(response){
 						$scope.playlists = response;
-						console.log('poop');
+						console.log(response);
 						$scope.playlistsReady = true;
 					});
 				});
@@ -365,8 +417,9 @@ angular.module('playlists').controller('PlaylistsController', ['$scope', '$http'
 				var tracks_link = plist.tracks_link;
 				var tracks_total = plist.track_total;
 				var numRequests = 1;
-				$scope.currentPlaylist = plist.name;
+				$scope.currentPlaylist = plist;
 				$scope.tracks = [];
+				$scope.tracksToDelete = [];
 
 
 				if (tracks_total > 100){

@@ -28,7 +28,8 @@ module.exports = {
 				'public/lib/angular-bootstrap/ui-bootstrap-tpls.js',
 				'public/lib/angular-spotify/src/angular-spotify.js',
 				'public/lib/angular-smart-table/dist/smart-table.js',
-				'public/lib/angular-soundmanager2/dist/angular-soundmanager2.js'
+				'public/lib/angular-soundmanager2/dist/angular-soundmanager2.js',
+				'public/lib/ngSticky/dist/sticky.min.js'
 			]
 		},
 		css: [
