@@ -17,7 +17,11 @@ module.exports = {
 				'public/lib/angular-sanitize/angular-sanitize.js',
 				'public/lib/angular-ui-router/release/angular-ui-router.min.js',
 				'public/lib/angular-ui-utils/ui-utils.min.js',
-				'public/lib/angular-bootstrap/ui-bootstrap-tpls.min.js'
+				'public/lib/angular-bootstrap/ui-bootstrap-tpls.min.js',
+				'public/lib/angular-spotify/src/angular-spotify.js',
+				'public/lib/angular-smart-table/dist/smart-table.min.js',
+				'public/lib/angular-soundmanager2/dist/angular-soundmanager2.min.js',
+				'public/lib/ngSticky/dist/sticky.min.js'
 			]
 		},
 		css: 'public/dist/application.min.css',
