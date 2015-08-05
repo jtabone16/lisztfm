@@ -305,6 +305,7 @@ angular.module('playlists').controller('PlaylistsController', ['$scope', '$http'
 		$scope.tracks = [];
 		$scope.tracksToDelete = [];
 		$scope.deleteTracks = 0;
+		$scope.currentUser = $window.user.username;
 
 		// $scope.remaining_playlists = 0;  TODO: get playlists if user has more than 50
 
@@ -313,18 +314,43 @@ angular.module('playlists').controller('PlaylistsController', ['$scope', '$http'
 
 
 		//Get playlists for current user from DB first, the if needed, make a request from Spotify
-		$http.get('/user/check')
-			.success(function(response) {
-				if (response.length === 0){
-					$scope.getPlaylists();
-				}
-				else{
-					$scope.playlists = response;
-					$scope.playlistsReady = true;
-				}
-			}).error(function (err){
-				console.log('User cannot be found. Try logging in.');
-			});
+		// $http.get('/user/check')
+		// 	.success(function(response) {
+		// 		if (response.length === 0){
+		// 			$scope.getPlaylists();
+		// 		}
+		// 		else{
+		// 			$scope.playlists = response;
+		// 			$scope.playlistsReady = true;
+		// 		}
+		// 	}).error(function (err){
+		// 		console.log('User cannot be found. Try logging in.');
+		// 	});
+
+		$scope.getPlaylists = function(){
+			var req = {
+				 method: 'GET' ,
+				 url: 'https://api.spotify.com/v1/users/' + $window.user.username + '/playlists' + '?limit=50',
+				 headers: {
+					 'Authorization': 'Bearer ' + $window.user.providerData.token
+				 },
+			};
+
+			//Get current user's spotify playlists
+			$http(req).
+				success(function(res){
+					$http.post('/user/playlists/add', res.items)
+					.success(function(response){
+						$scope.playlists = response;
+						console.log(response);
+						$scope.playlistsReady = true;
+					});
+				});
+
+		};
+
+		$scope.getPlaylists();
+
 
 		$scope.trackSelected = function(track){
 			console.log(track);
@@ -380,34 +406,14 @@ angular.module('playlists').controller('PlaylistsController', ['$scope', '$http'
 
 			$http(req).
 				success(function (res){
-					$scope.getTracks($scope.currentPlaylist);
-					//TODO: save snapshot for playlist AND show all playlists OWNED by the user
+					$state.reload(); //TODO: create method to delete tracks from playlist rather than adding tracks from playlist again
+					// $scope.getTracks($scope.currentPlaylist);
 					console.log(res);
+					$scope.currentPlaylist.snapshot_id.push(res.snapshot_id); //TODO: save snapshot for playlist in DB
+					console.log('snapshots' + $scope.currentPlaylist.snapshot_id.join(' end '));
 				}).
 				error(function (res){
 					console.log(res);
-				});
-
-		};
-
-		$scope.getPlaylists = function(){
-			var req = {
-				 method: 'GET' ,
-				 url: 'https://api.spotify.com/v1/users/' + $window.user.username + '/playlists' + '?limit=50',
-				 headers: {
-				   'Authorization': 'Bearer ' + $window.user.providerData.token
-				 },
-			};
-
-			//Get current user's spotify playlists
-			$http(req).
-				success(function(res){
-					$http.post('/user/playlists/add', res.items)
-					.success(function(response){
-						$scope.playlists = response;
-						console.log(response);
-						$scope.playlistsReady = true;
-					});
 				});
 
 		};
