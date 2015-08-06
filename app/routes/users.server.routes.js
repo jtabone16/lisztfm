@@ -51,8 +51,7 @@ module.exports = function(app) {
 	}));
 
 	app.route('/user/playlists/add').post(users.addPlaylists);
-	app.route('/user/playlist/tracks/add').post(users.addTracks);
-	app.route('/user/check').get(users.checkUser);
+	app.route('/user/playlists/selected').post(users.getSelectedPlaylist);
 
 
 	app.route('/auth/spotify/callback').get(users.oauthCallback('spotify'),

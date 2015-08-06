@@ -10,7 +10,10 @@ var mongoose = require('mongoose'),
  * Track Schema
  */
 var TrackSchema = new Schema({
-	playlist_id: String,
+	playlist_id: {
+		type: String,
+		ref: 'Playlist' 
+	},
 	added: Date,
 	added_by: String,
 	title: String,

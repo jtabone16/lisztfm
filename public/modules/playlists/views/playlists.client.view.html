@@ -12,7 +12,7 @@
 						</thead>
 						<tbody>
 							<tr ng-repeat="plist in playlists" ng-if="plist.owner == currentUser" class="table-menu">
-								<td ng-click="getTracks(plist)">
+								<td ng-click="getCurrentPlaylist(plist)">
 									{{plist.name}}
 									<span ng-show="plist.collaborative == true" class="collab_tag"> Collab </span>
 								</td>

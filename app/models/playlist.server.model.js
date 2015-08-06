@@ -11,8 +11,8 @@ var mongoose = require('mongoose'),
  */
 var PlaylistSchema = new Schema({
 	users: [{
-		type: Schema.ObjectId,
-		ref: 'Users'
+		type: Schema.Types.ObjectId,
+		ref: 'User'
 	}],
 	collaborative: Boolean,
 	id: String,
@@ -20,12 +20,13 @@ var PlaylistSchema = new Schema({
 	owner: String,
 	snapshot_id:[{
 		id: String,
-		created: Date
+		created: Date,
+		note: String
 	}],
 	tracks_link: String,
 	track_total: Number,
 	tracks: [{
-		type: Schema.ObjectId,
+		type: Schema.Types.ObjectId,
 		ref: 'Track'
 	}],
 });
