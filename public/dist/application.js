@@ -341,6 +341,13 @@ angular.module('playlists').controller('PlaylistsController', ['$scope', '$http'
 					else{
 						$scope.playlistsReady = true;
 					}
+				}).
+				error(function(err){
+					$http.get('/auth/refresh').
+						success(function(resp){
+							console.log('Successfully refreshed access token');
+							$scope.getPlaylists();
+						});
 				});
 		};
 
@@ -389,6 +396,13 @@ angular.module('playlists').controller('PlaylistsController', ['$scope', '$http'
 						$scope.tracksReady = true;
 						console.log($scope.tracks);
 					}
+				}).
+				error(function(err){
+					$http.get('/auth/refresh').
+						success(function(resp){
+							console.log('Successfully refreshed access token');
+							$scope.getTracks(req);
+						});
 				});
 		};
 
@@ -499,12 +513,14 @@ angular.module('playlists').controller('PlaylistsController', ['$scope', '$http'
 						});
 				}).
 				error(function (res){
-					console.log(res);
+					$http.get('/auth/refresh').
+						success(function(resp){
+							console.log('Successfully refreshed access token');
+							$scope.deleteTracksNow();
+						});
 				});
 
 		};
-
-
 
 	}
 ]);
@@ -615,17 +631,6 @@ angular.module('users').controller('AuthenticationController', ['$scope', '$http
 			}).error(function(response) {
 				$scope.error = response.message;
 			});
-		};
-
-		$scope.authSpotify = function(){
-				$http.get('/auth/spotify').
-					success(function (res){
-						console.log('Logging in via Spotify...');
-					}).
-					error (function (res){
-						console.log('Refreshing access token...');
-						$http.get('/auth/refresh');
-					});
 		};
 	}
 ]);
