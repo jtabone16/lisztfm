@@ -10,25 +10,20 @@ var mongoose = require('mongoose'),
  * Playlist Schema
  */
 var PlaylistSchema = new Schema({
-	users: [{
-		type: Schema.Types.ObjectId,
-		ref: 'User'
-	}],
 	collaborative: Boolean,
+	external_url: String,
+	images:[{
+		type: String
+	}],
 	id: String,
 	name: String,
 	owner: String,
-	snapshot_id:[{
+	snapshots:[{
 		id: String,
 		created: Date,
 		note: String
 	}],
-	tracks_link: String,
 	track_total: Number,
-	tracks: [{
-		type: Schema.Types.ObjectId,
-		ref: 'Track'
-	}],
 });
 
 mongoose.model('Playlist', PlaylistSchema);

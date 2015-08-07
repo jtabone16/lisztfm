@@ -5,63 +5,123 @@ angular.module('playlists').controller('PlaylistsController', ['$scope', '$http'
 
 		$scope.playlists = [];
 		$scope.playlistsReady = false;
+		$scope.tracksReady = false;
 		$scope.currentPlaylist = '';
 		$scope.tracks = [];
+		$scope.displayedTracks = [];
 		$scope.tracksToDelete = [];
 		$scope.deleteTracks = 0;
 		$scope.currentUser = $window.user.username;
 
-		// $scope.remaining_playlists = 0;  TODO: get playlists if user has more than 50
 
+		$scope.playlist_req = {
+			 method: 'GET' ,
+			 url: 'https://api.spotify.com/v1/users/' + $window.user.username + '/playlists',
+			 headers: {
+				 'Authorization': 'Bearer ' + $window.user.providerData.token
+			 },
+		};
 
-		//TODO: if token expires, use refresh token?
+		$scope.track_req = {
+			 method: 'GET' ,
+			 url: 'https://api.spotify.com/v1/users/' + $window.user.username + '/playlists/' +  $scope.currentPlaylist.id + '/tracks',
+			 headers: {
+				 'Authorization': 'Bearer ' + $window.user.providerData.token
+			 },
+		};
 
-
-		//Get playlists for current user from DB first, the if needed, make a request from Spotify
-		// $http.get('/user/check')
-		// 	.success(function(response) {
-		// 		if (response.length === 0){
-		// 			$scope.getPlaylists();
-		// 		}
-		// 		else{
-		// 			$scope.playlists = response;
-		// 			$scope.playlistsReady = true;
-		// 		}
-		// 	}).error(function (err){
-		// 		console.log('User cannot be found. Try logging in.');
-		// 	});
 
 		$scope.getPlaylists = function(){
-			var req = {
-				 method: 'GET' ,
-				 url: 'https://api.spotify.com/v1/users/' + $window.user.username + '/playlists' + '?limit=50',
-				 headers: {
-					 'Authorization': 'Bearer ' + $window.user.providerData.token
-				 },
-			};
-
 			//Get current user's spotify playlists
-			$http(req).
+			$http($scope.playlist_req).
 				success(function(res){
-					$http.post('/user/playlists/add', res.items).
-						success(function(response){
-							$scope.playlists = response;
-							$scope.playlistsReady = true;
-					});
+					$scope.playlists.push.apply($scope.playlists, res.items);
+
+					if (res.next !== null){
+						$scope.playlist_req.url = res.next;
+						$scope.getPlaylists();
+					}
+					else{
+						$scope.playlistsReady = true;
+					}
 				});
 		};
 
+
 		$scope.getPlaylists();
+
+		$scope.getTracks = function(req){
+			//Get current user's spotify playlists
+			$http(req).
+				success(function(res){
+					var trax = res.items;
+					for (var i in trax){
+						var artist = [];
+						var added_by = '';
+						for (var x in trax[i].track.artists){
+								artist.push(trax[i].track.artists[x].name);
+							}
+						if (trax[i].added_by !== null){
+							added_by = trax[i].added_by.id;
+						}
+
+						var track = {
+							'playlist_id': $scope.currentPlaylist.id,
+							'added': trax[i].added_at,
+							'added_by': added_by,
+							'title': trax[i].track.name,
+							'popularity': trax[i].track.popularity,
+							'external_url': trax[i].track.external_urls.spotify,
+							'api_url': trax[i].track.href,
+							'url': trax[i].track.preview_url,
+							'id': trax[i].track.id,
+							'explicit': trax[i].track.explicit,
+							'duration': trax[i].track.duration_ms,
+							'album': trax[i].track.album.name,
+							'artist': artist.join(),
+							'rating': 1
+						};
+						$scope.tracks.push(track);
+					}
+
+					if (res.next !== null){
+						req.url = res.next;
+						$scope.getTracks(req);
+					}
+					else{
+						$scope.tracksReady = true;
+						console.log($scope.tracks);
+					}
+				});
+		};
+
 
 
 		$scope.getCurrentPlaylist = function(plist){
+			$scope.tracks = [];
+			$scope.track_req.url = 'https://api.spotify.com/v1/users/' + $window.user.username + '/playlists/' +  plist.id + '/tracks';
+			$scope.getTracks($scope.track_req);
+
+			$scope.currentPlaylist = {
+				'id': plist.id,
+				'name': plist.name,
+				'collaborative': plist.collaborative,
+				'track_total': plist.tracks.total,
+				'images': plist.images,
+				'external_url': plist.external_urls.spotify,
+				'owner': plist.owner.id,
+				'snapshots': []
+			};
+
+			var snap = {
+				'id': plist.snapshot_id,
+				'created': new Date(),
+				'note': 'Imported playlist to liszt.fm',
+			};
+
+			$scope.currentPlaylist.snapshots.push(snap);
 
 
-			$http.post('/user/playlists/selected', plist).
-				success(function(res){
-					$scope.currentPlaylist = res.playlist;
-					$scope.tracks = res.tracks;
-				});
 		};
 
 
@@ -77,6 +137,9 @@ angular.module('playlists').controller('PlaylistsController', ['$scope', '$http'
 				track.rating++;
 			}
 		};
+
+
+
 
 		$scope.removeTrack = function(track){
 			var track_uri = 'spotify:track:' + track.id;
@@ -115,18 +178,28 @@ angular.module('playlists').controller('PlaylistsController', ['$scope', '$http'
 				 }
 			};
 
-			console.log(req);
-
 			$http(req).
 				success(function (res){
-					$state.reload(); //TODO: create method to delete tracks from playlist rather than adding tracks from playlist again
-					// $scope.getTracks($scope.currentPlaylist);
+					var deletedTracks = [];
+					for (var k in $scope.tracksToDelete){
+						var str = $scope.tracksToDelete[k].title + ' by ' + $scope.tracksToDelete[k].artist;
+						deletedTracks.push(str);
+					}
 					var snap = {
 						'id': res.snapshot_id,
-						'date': new Date(),
+						'created': new Date(),
+						'note': 'Deleted ' + $scope.tracksToDelete.length + ' tracks (' + deletedTracks.join() + ') from ' + $scope.currentPlaylist.name
 					};
-					$scope.currentPlaylist.snapshot_id.push(snap); //TODO: save snapshot for playlist in DB
-					console.log($scope.currentPlaylist);
+					$scope.tracksToDelete = [];
+					$scope.currentPlaylist.snapshots.push(snap);
+
+					$http.post('/user/playlist/add', $scope.currentPlaylist).
+						success(function(res){
+							$state.reload();
+						}).
+						error(function(res){
+							console.log('Error updating playlist in database');
+						});
 				}).
 				error(function (res){
 					console.log(res);

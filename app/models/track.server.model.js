@@ -12,12 +12,14 @@ var mongoose = require('mongoose'),
 var TrackSchema = new Schema({
 	playlist_id: {
 		type: String,
-		ref: 'Playlist' 
+		ref: 'Playlist'
 	},
 	added: Date,
 	added_by: String,
 	title: String,
 	popularity: Number,
+	external_url: String,
+	api_url: String, 
 	url: String,
 	id: String,
 	explicit: Boolean,
