@@ -616,6 +616,17 @@ angular.module('users').controller('AuthenticationController', ['$scope', '$http
 				$scope.error = response.message;
 			});
 		};
+
+		$scope.authSpotify = function(){
+				$http.get('/auth/spotify').
+					success(function (res){
+						console.log('Logging in via Spotify...');
+					}).
+					error (function (res){
+						console.log('Refreshing access token...');
+						$http.get('/auth/refresh');
+					});
+		};
 	}
 ]);
 

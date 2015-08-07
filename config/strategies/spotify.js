@@ -4,6 +4,7 @@
  * Module dependencies.
  */
 var passport = require('passport'),
+  refresh = require('passport-oauth2-refresh'),
 	url = require('url'),
 	SpotifyStrategy = require('passport-spotify').Strategy,
 	config = require('../config'),
@@ -11,18 +12,17 @@ var passport = require('passport'),
 
 module.exports = function() {
 	// Use spotify strategy
-  passport.use(new SpotifyStrategy({
+  var strategy = (new SpotifyStrategy({
       clientID: config.spotify.clientID,
       clientSecret: config.spotify.clientSecret,
       callbackURL: config.spotify.callbackURL,
       passReqToCallback: true
     },
-    function(req, token, refreshToken, tokenSecret, profile, done) {
+    function(req, token, refreshToken, profile, done) {
 			// Set the provider data and include tokens
 			var providerData = profile._json;
 			providerData.token = token;
 			providerData.refreshToken = refreshToken;
-			providerData.tokenSecret = tokenSecret;
 
 			// Create the user OAuth profile
 			var providerUserProfile = {
@@ -37,4 +37,7 @@ module.exports = function() {
 			users.saveOAuthUserProfile(req, providerUserProfile, done);
 		}
   ));
+
+	passport.use(strategy);
+	refresh.use(strategy);
 };
