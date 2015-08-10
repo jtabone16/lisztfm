@@ -300,6 +300,7 @@ angular.module('playlists').config(['$stateProvider',
 angular.module('playlists').controller('PlaylistsController', ['$scope', '$http', '$state', '$window', '$location', 'Spotify',
 	function($scope, $http, $state, $window, $location, Spotify) {
 
+
 		$scope.playlists = [];
 		$scope.playlistsReady = false;
 		$scope.tracksReady = false;
@@ -315,7 +316,7 @@ angular.module('playlists').controller('PlaylistsController', ['$scope', '$http'
 			 method: 'GET' ,
 			 url: 'https://api.spotify.com/v1/users/' + $window.user.username + '/playlists',
 			 headers: {
-				 'Authorization': 'Bearer ' + $window.user.providerData.token
+				 'Authorization': 'Bearer ' + $window.user.providerData.accessToken
 			 },
 		};
 
@@ -323,13 +324,14 @@ angular.module('playlists').controller('PlaylistsController', ['$scope', '$http'
 			 method: 'GET' ,
 			 url: 'https://api.spotify.com/v1/users/' + $window.user.username + '/playlists/' +  $scope.currentPlaylist.id + '/tracks',
 			 headers: {
-				 'Authorization': 'Bearer ' + $window.user.providerData.token
+				 'Authorization': 'Bearer ' + $window.user.providerData.accessToken
 			 },
 		};
 
 
 		$scope.getPlaylists = function(){
 			//Get current user's spotify playlists
+
 			$http($scope.playlist_req).
 				success(function(res){
 					$scope.playlists.push.apply($scope.playlists, res.items);
@@ -343,16 +345,32 @@ angular.module('playlists').controller('PlaylistsController', ['$scope', '$http'
 					}
 				}).
 				error(function(err){
-					$http.get('/auth/refresh').
-						success(function(resp){
-							console.log('Successfully refreshed access token');
-							$scope.getPlaylists();
-						});
+					//TODO: more efficient refreshing
 				});
 		};
 
+		$http.get('/auth/refresh').
+			success(function(resp){
+				$window.user.providerData.accessToken = resp.token;
+				$scope.playlist_req = {
+					 method: 'GET' ,
+					 url: 'https://api.spotify.com/v1/users/' + $window.user.username + '/playlists',
+					 headers: {
+						 'Authorization': 'Bearer ' + $window.user.providerData.accessToken
+					 },
+				};
 
-		$scope.getPlaylists();
+				$scope.track_req = {
+					 method: 'GET' ,
+					 url: 'https://api.spotify.com/v1/users/' + $window.user.username + '/playlists/' +  $scope.currentPlaylist.id + '/tracks',
+					 headers: {
+						 'Authorization': 'Bearer ' + $window.user.providerData.accessToken
+					 },
+				};
+
+				$scope.getPlaylists();
+			});
+
 
 		$scope.getTracks = function(req){
 			//Get current user's spotify playlists
@@ -394,7 +412,6 @@ angular.module('playlists').controller('PlaylistsController', ['$scope', '$http'
 					}
 					else{
 						$scope.tracksReady = true;
-						console.log($scope.tracks);
 					}
 				}).
 				error(function(err){
@@ -440,14 +457,14 @@ angular.module('playlists').controller('PlaylistsController', ['$scope', '$http'
 			console.log(track);
 		};
 
-		$scope.changeRating = function(track) {
-			if (track.rating === 2) {
-				track.rating = 0;
-			}
-			else{
-				track.rating++;
-			}
-		};
+		// $scope.changeRating = function(track) {
+		// 	if (track.rating === 2) {
+		// 		track.rating = 0;
+		// 	}
+		// 	else{
+		// 		track.rating++;
+		// 	}
+		// };
 
 
 

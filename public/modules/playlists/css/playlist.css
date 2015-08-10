@@ -5,11 +5,16 @@ td { break-word: word-wrap; }
   color: #fff;
 }
 
-table
+a {
+    text-decoration: none !important;
+    color: #000;
+}
+
+/*table
 {
     table-layout: fixed;
     max-width: 100%;
-}
+}*/
 
 tr.table-menu:hover {
   color: #fff;
@@ -24,7 +29,7 @@ tr.table-menu:hover {
 .track-menu-option.save-changes {
   text-align: center;
   margin-top: 2%;
-  margin-left: 22%;
+  /*margin-left: 22%;*/
   padding: 3%;
   cursor: none;  /* NOTE: May want a different cursor option here */
 }

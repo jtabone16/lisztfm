@@ -7,7 +7,37 @@ var _ = require('lodash'),
 	errorHandler = require('../errors.server.controller'),
 	mongoose = require('mongoose'),
 	passport = require('passport'),
-	User = mongoose.model('User');
+	User = mongoose.model('User'),
+	refresh = require('passport-oauth2-refresh');
+
+
+exports.refreshToken = function (req, res) {
+
+		var user = req.user;
+		refresh.requestNewAccessToken('spotify', user.providerData.refreshToken, function(err, accessToken, refreshToken) {
+      console.log('current token: ' + user.providerData.accessToken);
+      console.log('new token: ' + accessToken);
+
+		User.findById(user, function(err, found_user) {
+			console.log(found_user);
+			found_user.providerData.accessToken = accessToken;
+			console.log(found_user);
+			found_user.save(function(err){
+				if (err) {
+					res.status(400).send({
+						message: 'Error saving new access token for user'
+					});
+				}
+				else{
+					res.jsonp({
+						'token': accessToken,
+					});
+				}
+			});
+
+		});
+		});
+};
 
 /**
  * Signup
@@ -24,7 +54,7 @@ exports.signup = function(req, res) {
 	user.provider = 'local';
 	user.displayName = user.firstName + ' ' + user.lastName;
 
-	// Then save the user 
+	// Then save the user
 	user.save(function(err) {
 		if (err) {
 			return res.status(400).send({

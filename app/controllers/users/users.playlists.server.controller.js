@@ -65,6 +65,30 @@ exports.addPlaylist = function(req, res){
 
 };
 
+exports.getPlaylist = function(req,res) {
+	var playlist = req.body;
+
+	Playlist.findOne({'id': playlist.id},
+		function(err, plist){
+			if(err){
+				console.log('Error making DB query to find playlist ' + playlist.name);
+			}
+			else{
+				if (plist === null) {
+					res.status(400).send({message:'Not in DB yet. Init version control info..'});
+				}
+				else{
+					res.jsonp(plist);
+				}
+
+			}
+
+		});
+
+};
+
+
+
 
 // var spotifyApi = new SpotifyWebApi();
 //

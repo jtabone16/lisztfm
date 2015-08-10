@@ -3,9 +3,7 @@
 /**
  * Module dependencies.
  */
-var passport = require('passport'),
-    refresh = require('passport-oauth2-refresh');
-
+var passport = require('passport');
 
 module.exports = function(app) {
 	// User Routes
@@ -52,28 +50,24 @@ module.exports = function(app) {
 		showDialog: true
 	}));
 
-	app.route('/auth/refresh').get( function (req, res){
-		var user = req.user;
-		refresh.requestNewAccessToken('spotify', users.providerData.refreshToken, function(err, accessToken, refreshToken) {
-			users.providerData.token = accessToken;
-			users.providerData.refreshToken = refreshToken;
-
-			users.save(function(err){
-				if (err) {
-					res.status(400).send({
-						message: 'Error saving new access token for user'
-					});
-				}
-				else{
-					res.status(200).send({
-						message: 'Success saving new access token for user'
-					});
-				}
-			});
-		});
-	});
+	app.route('/auth/refresh').get(users.refreshToken,
+    passport.authenticate('spotify',{
+  		scope: [
+  			'playlist-read-collaborative',
+  			'playlist-modify-public',
+  			'playlist-read-private',
+  			'playlist-modify-private',
+  			'user-follow-read',
+  			'user-read-email',
+  			'user-library-read'
+  		],
+  		showDialog: true
+  	}));
 
 	app.route('/user/playlist/add').post(users.addPlaylist);
+
+	app.route('/user/playlist/get').post(users.getPlaylist);
+
 
 	app.route('/auth/spotify/callback').get(users.oauthCallback('spotify'),
 		function(req, res){
