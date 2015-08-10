@@ -415,41 +415,44 @@ angular.module('playlists').controller('PlaylistsController', ['$scope', '$http'
 					}
 				}).
 				error(function(err){
-					$http.get('/auth/refresh').
-						success(function(resp){
-							console.log('Successfully refreshed access token');
-							$scope.getTracks(req);
-						});
+
 				});
 		};
 
 
 
 		$scope.getCurrentPlaylist = function(plist){
-			$scope.tracks = [];
-			$scope.track_req.url = 'https://api.spotify.com/v1/users/' + $window.user.username + '/playlists/' +  plist.id + '/tracks';
-			$scope.getTracks($scope.track_req);
+			if ($scope.currentPlaylist.name !== plist.name){
+				$scope.tracks = [];
+				$scope.track_req.url = 'https://api.spotify.com/v1/users/' + plist.owner.id + '/playlists/' +  plist.id + '/tracks';
+				$scope.getTracks($scope.track_req);
 
-			$scope.currentPlaylist = {
-				'id': plist.id,
-				'name': plist.name,
-				'collaborative': plist.collaborative,
-				'track_total': plist.tracks.total,
-				'images': plist.images,
-				'external_url': plist.external_urls.spotify,
-				'owner': plist.owner.id,
-				'snapshots': []
-			};
+				$scope.currentPlaylist = {
+					'id': plist.id,
+					'name': plist.name,
+					'collaborative': plist.collaborative,
+					'track_total': plist.tracks.total,
+					'images': plist.images,
+					'external_url': plist.external_urls.spotify,
+					'owner': plist.owner.id,
+					'snapshots': [],
+				};
 
-			var snap = {
-				'id': plist.snapshot_id,
-				'created': new Date(),
-				'note': 'Imported playlist to liszt.fm',
-			};
+				$http.post('/user/playlist/get', $scope.currentPlaylist).
+					success(function(resp){
+						$scope.currentPlaylist.snapshots = resp.snapshots;
+					}).
+					error(function(resp){
+						var snap = {
+							'id': plist.snapshot_id,
+							'created': new Date(),
+							'note': 'Imported playlist to liszt.fm',
+						};
 
-			$scope.currentPlaylist.snapshots.push(snap);
+						$scope.currentPlaylist.snapshots.push(snap);
+					});
 
-
+			}
 		};
 
 
@@ -498,7 +501,7 @@ angular.module('playlists').controller('PlaylistsController', ['$scope', '$http'
 				 method: 'DELETE',
 				 url: 'https://api.spotify.com/v1/users/' + $window.user.username + '/playlists/' + $scope.tracks[0].playlist_id + '/tracks',
 				 headers: {
-					 'Authorization': 'Bearer ' + $window.user.providerData.token,
+					 'Authorization': 'Bearer ' + $window.user.providerData.accessToken,
 					 'Content-Type': 'application/json'
 				 },
 				 data: {
@@ -530,11 +533,7 @@ angular.module('playlists').controller('PlaylistsController', ['$scope', '$http'
 						});
 				}).
 				error(function (res){
-					$http.get('/auth/refresh').
-						success(function(resp){
-							console.log('Successfully refreshed access token');
-							$scope.deleteTracksNow();
-						});
+
 				});
 
 		};

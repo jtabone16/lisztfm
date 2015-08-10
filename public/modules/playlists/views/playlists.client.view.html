@@ -38,7 +38,7 @@
   </div>
 
   <div class="row">
-    <div class="col-xs-3" style="margin-right: 5%; margin-top: 10%; ">
+    <div class="col-xs-3" style="margin-right: 2%; margin-top: 10%; ">
 			<div class="removing" ng-show="currentPlaylist.snapshots.length > 0">
 				<div class="playlist_name"> Playlist History </div>
 				<div ng-repeat="snap in currentPlaylist.snapshots">
@@ -51,14 +51,14 @@
       <!-- init sound manager! -->
       <sound-manager></sound-manager>
       <table ng-show="tracksReady" st-safe-src="tracks" st-table="displayedTracks" class="table table-striped table-hover">
-        <p>{{currentPlaylist.name}} </p>
+        <h3 style="text-align: center;">{{currentPlaylist.name}} </h3>
         <thead>
           <tr>
-            <th>Actions <span style="color:#2d6"> * </span></th>
+            <th>Actions</th>
             <th st-sort="name">Song</th>
             <th st-sort="artist">Artist</th>
-            <th st-sort="added_by">Added by</th>
-            <th st-sort-default="reverse" st-sort="added">Added at</th>
+            <th st-sort="added_by">User</th>
+            <th st-sort-default="reverse" st-sort="added">Added</th>
           </tr>
           <tr>
             <th colspan="4"><input st-search=" " class="form-control" placeholder="Search any playlist field, click column title to sort" type="text"/></th>

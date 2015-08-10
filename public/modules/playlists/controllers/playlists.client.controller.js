@@ -127,7 +127,7 @@ angular.module('playlists').controller('PlaylistsController', ['$scope', '$http'
 		$scope.getCurrentPlaylist = function(plist){
 			if ($scope.currentPlaylist.name !== plist.name){
 				$scope.tracks = [];
-				$scope.track_req.url = 'https://api.spotify.com/v1/users/' + $window.user.username + '/playlists/' +  plist.id + '/tracks';
+				$scope.track_req.url = 'https://api.spotify.com/v1/users/' + plist.owner.id + '/playlists/' +  plist.id + '/tracks';
 				$scope.getTracks($scope.track_req);
 
 				$scope.currentPlaylist = {
