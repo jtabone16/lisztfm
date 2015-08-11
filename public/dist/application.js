@@ -61,23 +61,29 @@ ApplicationConfiguration.registerModule('users');
 angular.module('core').config(['$stateProvider', '$urlRouterProvider',
 	function($stateProvider, $urlRouterProvider) {
 		// Redirect to home view when route not found
-		$urlRouterProvider.otherwise('/');
+		$urlRouterProvider.otherwise('/signin');
 
-		// Home state routing
-		$stateProvider.
-		state('home', {
-			url: '/',
-			templateUrl: 'modules/core/views/home.client.view.html'
-		});
+		// // Home state routing
+		// $stateProvider.
+		// state('home', {
+		// 	url: '/',
+		// 	templateUrl: 'modules/core/views/signin.client.view'
+		// });
 	}
 ]);
+
 'use strict';
 
-angular.module('core').controller('HeaderController', ['$scope', 'Authentication', 'Menus',
-	function($scope, Authentication, Menus) {
+angular.module('core').controller('HeaderController', ['$scope', '$location', 'Authentication', 'Menus',
+	function($scope, $location, Authentication, Menus) {
 		$scope.authentication = Authentication;
 		$scope.isCollapsed = false;
-		$scope.menu = Menus.getMenu('topbar');
+		// $scope.menu = Menus.getMenu('topbar');
+
+		$scope.isActive = function(viewLocation) {
+			console.log($location.path());
+    	return viewLocation === $location.path();
+		};
 
 		$scope.toggleCollapsibleMenu = function() {
 			$scope.isCollapsed = !$scope.isCollapsed;
@@ -89,6 +95,7 @@ angular.module('core').controller('HeaderController', ['$scope', 'Authentication
 		});
 	}
 ]);
+
 'use strict';
 
 
@@ -103,6 +110,22 @@ angular.module('core').controller('HomeController', ['$scope', '$window', '$loca
 		// This provides Authentication context.
 		$scope.authentication = Authentication;
 	}
+]);
+
+'use strict';
+
+angular.module('core').controller('LayoutController', ['$scope', '$location',
+		function($scope, $location) {
+
+			$scope.showHeader = function() {
+				var header_pages = ['/playlists'];
+				if (header_pages.indexOf($location.path()) >= 0) {
+					return true;
+				} else {
+					return false;
+				}
+			};
+		}
 ]);
 
 'use strict';
@@ -618,12 +641,14 @@ angular.module('users').config(['$stateProvider',
 ]);
 'use strict';
 
-angular.module('users').controller('AuthenticationController', ['$scope', '$http', '$location', 'Authentication',
-	function($scope, $http, $location, Authentication) {
+angular.module('users').controller('AuthenticationController', ['$scope', '$http', '$location', '$window', 'Authentication',
+	function($scope, $http, $location, $window, Authentication) {
 		$scope.authentication = Authentication;
 
 		// If user is signed in then redirect back home
-		if ($scope.authentication.user) $location.path('/');
+		if($window.user !== '') {
+			$location.path('/playlists');
+		}
 
 		$scope.signup = function() {
 			$http.post('/auth/signup', $scope.credentials).success(function(response) {

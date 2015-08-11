@@ -1,14 +1,75 @@
-@media (min-width: 992px) {
-	.nav-users {
-		position: fixed;
-	}
+
+.background-img-signin {
+	min-height: 800px;
+	background-repeat: no-repeat;
+	background-position: center;
+	background-size: cover;
+	background-attachment: scroll;
+	background: #000000 url("http://media.liveauctiongroup.net/i/7762/9361097_1.jpg?v=8CC9B31372E95E0") no-repeat center center scroll; /* Works because image is 5000+ px width by height */
 }
-.remove-account-container {
-	display: inline-block;
-	position: relative;
+
+/*.background-img-signin.desaturate {
+	-webkit-filter: grayscale(100%);
+	filter: grayscale(100%);
+}*/
+
+
+
+.intro-group {
+	margin-top: 50%;
+	margin-left: 10%;
+	padding: 10%;
+	background-color: rgba(0, 0, 0, 0.5) !important;
+	width:150%;
+	height:100%;
+	border: #9e3 5px solid;
+	border-radius: 5%;
 }
-.btn-remove-account {
-	top: 10px;
-	right: 10px;
-	position: absolute;
+
+.intro-text {
+	text-align: center;
+	font-size: 1.2em;
+	font-weight: bold;
+	padding: 2%;
+	color: #9e3;
+	word-wrap: break-word;
+}
+
+.credits, .credits a{
+	text-align: center;
+	font-size: 1.0em;
+	font-weight: bold;
+	/*padding: 2%;*/
+	margin-top: 5%;
+	color: #9e3 !important;
+	word-wrap: break-word;
+}
+
+.login {
+	margin-top: 5%;
+	margin-left: 10%;
+}
+
+/*.logo {
+	display:block;
+  margin:auto;
+}*/
+
+
+/* ==========================================
+
+Mobile Screen Breakpoints
+
+============================================= */
+
+@media screen and (min-width : 768px) {      /*  Small Devices  - smart phones & up */
+
+}
+
+@media screen and (min-width : 992px) {      /*  Medium Devices - desktops & up */
+
+}
+
+@media screen and (min-width : 1200px) {      /*  Large displays - & up */
+
 }
