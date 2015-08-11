@@ -18,7 +18,6 @@ exports.refreshToken = function (req, res) {
 
 		User.findById(user, function(err, found_user) {
 			found_user.providerData.accessToken = accessToken;
-			console.log(found_user);
 			found_user.save(function(err){
 				if (err) {
 					res.status(400).send({
