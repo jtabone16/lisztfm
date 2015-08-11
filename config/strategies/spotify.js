@@ -24,12 +24,6 @@ module.exports = function() {
 			providerData.accessToken = accessToken;
 			providerData.refreshToken = refreshToken;
 
-			console.log('provider data');
-			console.log(providerData);
-
-			console.log('profilezzz:');
-			console.log(profile);
-
 			// Create the user OAuth profile
 			var providerUserProfile = {
 				displayName: profile.displayName,
@@ -39,8 +33,6 @@ module.exports = function() {
 				providerIdentifierField: 'id',
 				providerData: providerData
 			};
-
-			console.log(req);
 
 			// Save the user OAuth profile
 			users.saveOAuthUserProfile(req, providerUserProfile, done);
