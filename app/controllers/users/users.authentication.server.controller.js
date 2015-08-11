@@ -15,11 +15,8 @@ exports.refreshToken = function (req, res) {
 
 		var user = req.user;
 		refresh.requestNewAccessToken('spotify', user.providerData.refreshToken, function(err, accessToken, refreshToken) {
-      console.log('current token: ' + user.providerData.accessToken);
-      console.log('new token: ' + accessToken);
 
 		User.findById(user, function(err, found_user) {
-			console.log(found_user);
 			found_user.providerData.accessToken = accessToken;
 			console.log(found_user);
 			found_user.save(function(err){

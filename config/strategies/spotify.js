@@ -24,14 +24,23 @@ module.exports = function() {
 			providerData.accessToken = accessToken;
 			providerData.refreshToken = refreshToken;
 
+			console.log('provider data');
+			console.log(providerData);
+
+			console.log('profilezzz:');
+			console.log(profile);
+
 			// Create the user OAuth profile
 			var providerUserProfile = {
 				displayName: profile.displayName,
 				username: profile.username,
+				email: providerData.email,
 				provider: 'spotify',
-				providerIdentifierField: 'id_str',
+				providerIdentifierField: 'id',
 				providerData: providerData
 			};
+
+			console.log(req);
 
 			// Save the user OAuth profile
 			users.saveOAuthUserProfile(req, providerUserProfile, done);
