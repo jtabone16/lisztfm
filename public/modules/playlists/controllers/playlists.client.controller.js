@@ -14,6 +14,8 @@ angular.module('playlists').controller('PlaylistsController', ['$scope', '$http'
 		$scope.deleteTracks = 0;
 		$scope.currentUser = $window.user;
 		$scope.currentTrack = '';
+		$scope.search_subject =
+		$scope.search_type = 'search';
 
 
 		$scope.playlist_req = {
@@ -31,6 +33,40 @@ angular.module('playlists').controller('PlaylistsController', ['$scope', '$http'
 				 'Authorization': 'Bearer ' + $window.user.providerData.accessToken
 			 },
 		};
+
+		$scope.search_req = {
+			 method: 'GET' ,
+			 url: 'https://api.spotify.com/v1/search?q=',
+			 headers: {
+				 'Authorization': 'Bearer ' + $window.user.providerData.accessToken
+			 },
+		};
+
+
+		$scope.getSearchResults = function (keyEvent){
+			if (keyEvent.which === 13){
+				$scope.search_req = {
+					 method: 'GET' ,
+					 url: 'https://api.spotify.com/v1/search?q=' + $scope.search_subject.split('%20') + '&type=' + $scope.search_type,
+					 headers: {
+						 'Authorization': 'Bearer ' + $window.user.providerData.accessToken
+					 },
+				};
+
+				console.log($scope.search_req);
+
+				$http($scope.search_req).
+					success(function (res){
+						console.log(res);
+					}).
+					error(function (res){
+						console.log(res);
+					});
+
+			}
+
+		};
+
 
 
 		$scope.getPlaylists = function(){

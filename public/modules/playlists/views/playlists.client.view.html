@@ -45,6 +45,25 @@
         </tbody>
       </table>
     </div>
+
+    <div class="row" style="margin-bottom: 5%;">
+      <div class="col-xs-8 col-xs-offset-2">
+        <div class="input-group">
+          <div class="input-group-btn">
+            <span class="dropdown">
+            <button type="button" class="btn dropdown-toggle" ng-disabled="disabled" href="" ng-model="search_type"> {{search_type}}<span class="caret"></span></button>
+            <ul class="dropdown-menu" dropdown-menu>
+              <li><a role="menuitem" ng-click="search_type = 'track'">track</a></li>
+              <li><a role="menuitem" ng-click="search_type = 'album'">album</a></li>
+              <li><a role="menuitem" ng-click="search_type = 'artist'">artist</a></li>
+            </ul>
+          </span>
+          </div><!-- /btn-group -->
+          <input ng-model="search_subject" ng-keypress="getSearchResults($event)" type="text" class="form-control" aria-label="...">
+        </div><!-- /input-group -->
+      </div>
+    </div>
+
   </div>
     <div class="row">
       <div class="col-xs-3">

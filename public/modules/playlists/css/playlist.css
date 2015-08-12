@@ -2,6 +2,32 @@
 	background-color: #4e514f !important;
 }
 
+.dropdown-toggle {
+	background: rgba(0, 0, 0, 0.3) !important;
+	color: #2d6;
+	border: 2px #2d6 solid;
+}
+
+.dropdown-toggle:hover, .dropdown-toggle:focus {
+	background: rgba(0, 0, 0, 0.3) !important;
+	color: #2d6;
+	border: 2px #2d6 solid;
+}
+
+
+.dropdown-menu {
+	background: rgba(0, 0, 0, 0.3) !important;
+}
+
+.dropdown-menu li a {
+	color: #2d6 !important;
+}
+
+.dropdown-menu li a:hover {
+	background: rgba(0, 0, 0, 0.7) !important;
+	color: #2d6 !important;
+	cursor: pointer;
+}
 
 td { break-word: word-wrap; }
 
