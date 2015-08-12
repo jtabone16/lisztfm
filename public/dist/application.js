@@ -81,7 +81,6 @@ angular.module('core').controller('HeaderController', ['$scope', '$location', 'A
 		// $scope.menu = Menus.getMenu('topbar');
 
 		$scope.isActive = function(viewLocation) {
-			console.log($location.path());
     	return viewLocation === $location.path();
 		};
 
@@ -332,7 +331,7 @@ angular.module('playlists').controller('PlaylistsController', ['$scope', '$http'
 		$scope.displayedTracks = [];
 		$scope.tracksToDelete = [];
 		$scope.deleteTracks = 0;
-		$scope.currentUser = $window.user.username;
+		$scope.currentUser = $window.user;
 
 
 		$scope.playlist_req = {

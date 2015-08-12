@@ -7,7 +7,6 @@ angular.module('core').controller('HeaderController', ['$scope', '$location', 'A
 		// $scope.menu = Menus.getMenu('topbar');
 
 		$scope.isActive = function(viewLocation) {
-			console.log($location.path());
     	return viewLocation === $location.path();
 		};
 

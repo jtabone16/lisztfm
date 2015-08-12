@@ -1,10 +1,10 @@
 <div class="ng-cloak container-fluid" data-ng-controller="PlaylistsController">
   <div class="row">
     <div class="col-xs-6 playlist_table">
-      <h5 ng-show="playlistsReady">Playlists owned by {{currentUser}}</h5>
+      <h5 ng-show="playlistsReady">Playlists owned by {{currentUser.displayName}}</h5>
       <table ng-show="playlistsReady" class="table table-hover" style="">
         <tbody>
-          <tr ng-repeat="plist in playlists" ng-if="plist.owner.id == currentUser" class="table-menu">
+          <tr ng-repeat="plist in playlists" ng-if="plist.owner.id == currentUser.username" class="table-menu">
             <td ng-click="getCurrentPlaylist(plist)">
               {{plist.name}}
               <span ng-show="plist.collaborative == true" class="collab_tag"> Collab </span>
@@ -15,10 +15,10 @@
     </div>
 
     <div class="col-xs-6 playlist_table">
-      <h5 ng-show="playlistsReady">Playlists followed by {{currentUser}}</h5>
+      <h5 ng-show="playlistsReady">Playlists followed by {{currentUser.displayName}}</h5>
       <table ng-show="playlistsReady" class="table table-hover">
         <tbody>
-          <tr ng-repeat="plist in playlists" ng-if="plist.owner.id !== currentUser" class="table-menu">
+          <tr ng-repeat="plist in playlists" ng-if="plist.owner.id !== currentUser.username" class="table-menu">
             <td ng-click="getCurrentPlaylist(plist)">
               {{plist.name}}
               <span ng-show="plist.collaborative == true" class="collab_tag"> Collab </span>
