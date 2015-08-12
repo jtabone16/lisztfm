@@ -16,6 +16,7 @@ angular.module('playlists').controller('PlaylistsController', ['$scope', '$http'
 		$scope.currentTrack = '';
 		$scope.search_subject =
 		$scope.search_type = 'search';
+		$scope.selected_playlist = undefined;
 
 
 		$scope.playlist_req = {
@@ -278,6 +279,20 @@ angular.module('playlists').controller('PlaylistsController', ['$scope', '$http'
 
 				});
 
+		};
+
+		$scope.onSelect = function ($item, $model, $label) {
+			 $scope.getCurrentPlaylist($item)
+		};
+
+
+		//Custom filters
+		$scope.isOwned = function (plist){
+			return plist.owner.id === $scope.currentUser.username;
+		};
+
+		$scope.follows = function (plist){
+			return plist.owner.id !== $scope.currentUser.username;
 		};
 
 	}

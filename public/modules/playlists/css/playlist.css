@@ -1,3 +1,12 @@
+.form-control.playlist-search{
+	background: rgba(0, 0, 0, 0.3) !important;
+	color: #2d6;
+	margin-bottom: 5%;
+	border: 1px #2d6 solid;
+	border-radius: 3%;
+	box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(34,221,102, 0.6);
+}
+
 .background-main {
 	background-color: #4e514f !important;
 }
@@ -134,13 +143,13 @@ tr.table-menu:hover {
   border-radius: 2%;
 	overflow-x: scroll;
 	margin-bottom: 5%;
-	background: rgba(0, 0, 0, 0.7) !important;
+	background: rgba(0, 0, 0, 0.3) !important;
 }
 
 .playlist_edit .playlist_name {
   font-size: 1.2em;
   font-weight: bold;
-  padding: 5%;
+  padding: 2%;
 	margin-top: 1%;
 	margin-bottom: 1%;
 }
@@ -148,7 +157,7 @@ tr.table-menu:hover {
 
 .playlist_edit .track_name {
   font-size: 1.0em;
-  padding: 3%;
+  padding: 2%;
 }
 
 .collab_tag {
