@@ -1,12 +1,8 @@
-<div class="container-fluid" data-ng-controller="PlaylistsController">
+<div class="ng-cloak container-fluid" data-ng-controller="PlaylistsController">
   <div class="row">
-    <div class="col-xs-6" style="height: 300px; border:0; padding:1%; margin: 0; margin-top:2%; overflow: auto">
-      <table ng-show="playlistsReady" class="table table-striped table-hover" style="">
-        <thead>
-          <tr>
-            <th>Playlists Owned by {{currentUser}}</th>
-          </tr>
-        </thead>
+    <div class="col-xs-6 playlist_table">
+      <h5 ng-show="playlistsReady">Playlists owned by {{currentUser}}</h5>
+      <table ng-show="playlistsReady" class="table table-hover" style="">
         <tbody>
           <tr ng-repeat="plist in playlists" ng-if="plist.owner.id == currentUser" class="table-menu">
             <td ng-click="getCurrentPlaylist(plist)">
@@ -18,13 +14,9 @@
       </table>
     </div>
 
-    <div class="col-xs-6" style="height:300px; border: 0; padding:1%; margin: 0; margin-top:2%; overflow: auto">
-      <table ng-show="playlistsReady" class="table table-striped table-hover">
-        <thead>
-          <tr>
-            <th>Playlists Followed by {{currentUser}}</th>
-          </tr>
-        </thead>
+    <div class="col-xs-6 playlist_table">
+      <h5 ng-show="playlistsReady">Playlists followed by {{currentUser}}</h5>
+      <table ng-show="playlistsReady" class="table table-hover">
         <tbody>
           <tr ng-repeat="plist in playlists" ng-if="plist.owner.id !== currentUser" class="table-menu">
             <td ng-click="getCurrentPlaylist(plist)">
@@ -38,20 +30,36 @@
   </div>
 
   <div class="row">
-    <div class="col-xs-3" style="margin-right: 2%; margin-top: 10%; ">
-			<div class="removing" ng-show="currentPlaylist.snapshots.length > 0">
-				<div class="playlist_name"> Playlist History </div>
-				<div ng-repeat="snap in currentPlaylist.snapshots">
-					<div class="track_name"> <span style="font-weight:bold;">{{snap.created}}</span> by {{snap.note}}</div>
-				</div>
-			</div>
+    <div class="col-xs-12">
+      <div class="row">
+        <div class="col-xs-6">
+    			<div class="playlist_edit" ng-show="currentPlaylist.snapshots.length > 0">
+    				<div class="playlist_name"> Playlist History </div>
+    				<div ng-repeat="snap in currentPlaylist.snapshots">
+    					<div class="track_name"> <span style="font-weight:500; color:#2d6;">{{snap.created}}</span> {{snap.note}}</div>
+    				</div>
+    			</div>
+        </div>
+
+        <div class="col-xs-6" >
+          <div class="playlist_edit" ng-show="tracksToDelete.length > 0">
+            <div class="playlist_name"> Removing {{tracksToDelete.length}} tracks: </div>
+            <div ng-repeat="track in tracksToDelete">
+              <div class="track_name"> <span style="font-weight:bold;">{{track.title}}</span> by {{track.artist}}</div>
+            </div>
+            <button type="button" class="delete_button btn btn-default" ng-model="deleteTracks" ng-click="deleteTracksNow()"btn-checkbox btn-checkbox-true="1" btn-checkbox-false="0">
+                Delete Tracks
+            </button>
+          </div>
+        </div>
+      </div>
     </div>
 
-    <div class="col-xs-5" style=" border:0; padding:1%; margin: 0; margin-top:2%;">
+    <div ng-show="tracksReady" class="col-xs-12 playlist_table_smart">
       <!-- init sound manager! -->
       <sound-manager></sound-manager>
-      <table ng-show="tracksReady" st-safe-src="tracks" st-table="displayedTracks" class="table table-striped table-hover">
-        <h3 style="text-align: center;">{{currentPlaylist.name}} </h3>
+      <table ng-show="tracksReady" st-safe-src="tracks" st-table="displayedTracks" class="table table-hover">
+        <h5 style="text-align: center;">{{currentPlaylist.name}} </h5>
         <thead>
           <tr>
             <th>Actions</th>
@@ -81,28 +89,14 @@
             <td>{{track.added | date:'shortDate'}}</td>
           </tr>
         </tbody>
-        <tfoot>
+        <!-- <tfoot>
           <tr>
             <td colspan="4" class="text-center">
               <div st-pagination="" st-items-by-page="20"></div>
             </td>
           </tr>
-        </tfoot>
+        </tfoot> -->
       </table>
-
-    </div>
-
-    <div class="col-xs-3" style="margin-left: 5%; margin-top: 10%; ">
-      <div class="removing" ng-show="tracksToDelete.length > 0">
-        <div class="playlist_name"> Removing {{tracksToDelete.length}} tracks: </div>
-        <div ng-repeat="track in tracksToDelete">
-          <div class="track_name"> <span style="font-weight:bold;">{{track.title}}</span> by {{track.artist}}</div>
-        </div>
-        <button type="button" class="delete_button btn btn-default" ng-model="deleteTracks" ng-click="deleteTracksNow()"btn-checkbox btn-checkbox-true="1" btn-checkbox-false="0">
-            Delete Tracks
-        </button>
-      </div>
-
     </div>
   </div>
 

@@ -368,34 +368,31 @@ angular.module('playlists').controller('PlaylistsController', ['$scope', '$http'
 					}
 				}).
 				error(function(err){
-					$http.get('/auth/refresh');
 					//TODO: more efficient refreshing
 				});
 		};
 
-		// $http.get('/auth/refresh').
-		// 	success(function(resp){
-		// 		$window.user.providerData.accessToken = resp.token;
-		// 		$scope.playlist_req = {
-		// 			 method: 'GET' ,
-		// 			 url: 'https://api.spotify.com/v1/users/' + $window.user.username + '/playlists',
-		// 			 headers: {
-		// 				 'Authorization': 'Bearer ' + $window.user.providerData.accessToken
-		// 			 },
-		// 		};
-		//
-		// 		$scope.track_req = {
-		// 			 method: 'GET' ,
-		// 			 url: 'https://api.spotify.com/v1/users/' + $window.user.username + '/playlists/' +  $scope.currentPlaylist.id + '/tracks',
-		// 			 headers: {
-		// 				 'Authorization': 'Bearer ' + $window.user.providerData.accessToken
-		// 			 },
-		// 		};
-		//
-		// 		$scope.getPlaylists();
-		// 	});
+		$http.get('/auth/refresh').
+			success(function(resp){
+				$window.user.providerData.accessToken = resp.token;
+				$scope.playlist_req = {
+					 method: 'GET' ,
+					 url: 'https://api.spotify.com/v1/users/' + $window.user.username + '/playlists',
+					 headers: {
+						 'Authorization': 'Bearer ' + $window.user.providerData.accessToken
+					 },
+				};
 
-		$scope.getPlaylists();
+				$scope.track_req = {
+					 method: 'GET' ,
+					 url: 'https://api.spotify.com/v1/users/' + $window.user.username + '/playlists/' +  $scope.currentPlaylist.id + '/tracks',
+					 headers: {
+						 'Authorization': 'Bearer ' + $window.user.providerData.accessToken
+					 },
+				};
+
+				$scope.getPlaylists();
+			});
 
 
 		$scope.getTracks = function(req){
@@ -441,7 +438,7 @@ angular.module('playlists').controller('PlaylistsController', ['$scope', '$http'
 					}
 				}).
 				error(function(err){
-					$http.get('/auth/refresh');
+
 				});
 		};
 
@@ -559,7 +556,7 @@ angular.module('playlists').controller('PlaylistsController', ['$scope', '$http'
 						});
 				}).
 				error(function (res){
-					$http.get('/auth/refresh');
+
 				});
 
 		};
