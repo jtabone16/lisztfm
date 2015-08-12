@@ -13,6 +13,7 @@ angular.module('playlists').controller('PlaylistsController', ['$scope', '$http'
 		$scope.tracksToDelete = [];
 		$scope.deleteTracks = 0;
 		$scope.currentUser = $window.user;
+		$scope.currentTrack = '';
 
 
 		$scope.playlist_req = {
@@ -162,6 +163,7 @@ angular.module('playlists').controller('PlaylistsController', ['$scope', '$http'
 
 		$scope.trackSelected = function(track){
 			console.log(track);
+			$scope.currentTrack = 'https://embed.spotify.com/?uri=spotify:track:' + track.id;
 		};
 
 		// $scope.changeRating = function(track) {

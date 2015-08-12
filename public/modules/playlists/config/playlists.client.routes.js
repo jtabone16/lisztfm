@@ -11,3 +11,11 @@ angular.module('playlists').config(['$stateProvider',
 		});
 	}
 ]);
+
+
+//Whitelisting Spotify embed URLs
+angular.module('playlists').config(['$sceDelegateProvider',
+	function($sceDelegateProvider) {
+		$sceDelegateProvider.resourceUrlWhitelist(['self','https://embed.spotify.com/**']);
+	},
+]);

@@ -1,4 +1,22 @@
 <div class="ng-cloak container-fluid" data-ng-controller="PlaylistsController">
+  <div sticky class="row" sticky-class="sticky_row">
+    <div class='col-xs-6'ng-show="currentTrack !== ''">
+      <iframe ng-src="{{currentTrack}}" width="300" height="80" frameborder="0" allowtransparency="true"></iframe>
+    </div>
+
+    <div class="col-xs-6">
+      <div class="playlist_edit" ng-show="tracksToDelete.length > 0">
+        <div class="playlist_name"> Removing {{tracksToDelete.length}} tracks: </div>
+        <div ng-repeat="track in tracksToDelete">
+          <div class="track_name"> <span style="font-weight:bold;">{{track.title}}</span> by {{track.artist}}</div>
+        </div>
+        <button type="button" class="delete_button btn btn-default" ng-model="deleteTracks" ng-click="deleteTracksNow()"btn-checkbox btn-checkbox-true="1" btn-checkbox-false="0">
+            Delete Tracks
+        </button>
+      </div>
+    </div>
+
+  </div>
   <div class="row">
     <div class="col-xs-6 playlist_table">
       <h5 ng-show="playlistsReady">Playlists owned by {{currentUser.displayName}}</h5>
@@ -28,75 +46,57 @@
       </table>
     </div>
   </div>
-
-  <div class="row">
-    <div class="col-xs-12">
-      <div class="row">
-        <div class="col-xs-6">
-    			<div class="playlist_edit" ng-show="currentPlaylist.snapshots.length > 0">
-    				<div class="playlist_name"> Playlist History </div>
-    				<div ng-repeat="snap in currentPlaylist.snapshots">
-    					<div class="track_name"> <span style="font-weight:500; color:#2d6;">{{snap.created}}</span> {{snap.note}}</div>
-    				</div>
-    			</div>
-        </div>
-
-        <div class="col-xs-6" >
-          <div class="playlist_edit" ng-show="tracksToDelete.length > 0">
-            <div class="playlist_name"> Removing {{tracksToDelete.length}} tracks: </div>
-            <div ng-repeat="track in tracksToDelete">
-              <div class="track_name"> <span style="font-weight:bold;">{{track.title}}</span> by {{track.artist}}</div>
-            </div>
-            <button type="button" class="delete_button btn btn-default" ng-model="deleteTracks" ng-click="deleteTracksNow()"btn-checkbox btn-checkbox-true="1" btn-checkbox-false="0">
-                Delete Tracks
-            </button>
+    <div class="row">
+      <div class="col-xs-3">
+        <div class="history" ng-show="currentPlaylist.snapshots.length > 0">
+          <div class="playlist_name"> Playlist History </div>
+          <div ng-repeat="snap in currentPlaylist.snapshots">
+            <div class="track_name"> <span style="font-weight:500; color:#2d6;">{{snap.created | date:'shortDate'}}</span> {{snap.note}}</div>
           </div>
         </div>
       </div>
-    </div>
-
-    <div ng-show="tracksReady" class="col-xs-12 playlist_table_smart">
-      <!-- init sound manager! -->
-      <sound-manager></sound-manager>
-      <table ng-show="tracksReady" st-safe-src="tracks" st-table="displayedTracks" class="table table-hover">
-        <h5 style="text-align: center;">{{currentPlaylist.name}} </h5>
-        <thead>
-          <tr>
-            <th>Actions</th>
-            <th st-sort="name">Song</th>
-            <th st-sort="artist">Artist</th>
-            <th st-sort="added_by">User</th>
-            <th st-sort-default="reverse" st-sort="added">Added</th>
-          </tr>
-          <tr>
-            <th colspan="4"><input st-search=" " class="form-control" placeholder="Search any playlist field, click column title to sort" type="text"/></th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr st-select-row="track" ng-repeat="track in displayedTracks" ng-click="trackSelected(track)" class="table-menu">
-            <td>
-              <i class="track-menu-option glyphicon glyphicon-play" music-player="play" add-song="track"></i>
-              <i class="track-menu-option glyphicon glyphicon-pause" pause-music></i>
-              <i class="track-menu-option glyphicon glyphicon-trash" ng-click="removeTrack(track)"> </i>
-              <!-- <i class="track-menu-option glyphicon glyphicon-comment"> </i> -->
-							<a class="track-menu-option glyphicon glyphicon-music" href="{{track.external_url}}" target="_blank"></a>
-              <!-- <i class="track-menu-option flaticonNormal" ng-click="changeRating(track)" ng-class="{flaticonBad: track.rating == 0, flaticonNormal: track.rating == 1, flaticonGreat: track.rating == 2}"></i> -->
-              <!-- <i class="track-menu-option save-changes glyphicon glyphicon-remove" ng-class="{'pending_deletion': track.edited}"></i> -->
-            </td>
-            <td>{{track.title}}</td>
-            <td>{{track.artist}}</td>
-            <td>{{track.added_by}}</td>
-            <td>{{track.added | date:'shortDate'}}</td>
-          </tr>
-        </tbody>
-        <!-- <tfoot>
-          <tr>
-            <td colspan="4" class="text-center">
-              <div st-pagination="" st-items-by-page="20"></div>
-            </td>
-          </tr>
-        </tfoot> -->
-      </table>
+      <div ng-show="tracksReady" class="col-xs-9 playlist_table_smart">
+        <!-- init sound manager! -->
+        <sound-manager></sound-manager>
+        <table ng-show="tracksReady" st-safe-src="tracks" st-table="displayedTracks" class="table table-hover">
+          <h5 style="text-align: center;">{{currentPlaylist.name}} </h5>
+          <thead>
+            <tr>
+              <th></th>
+              <th st-sort="name">Song</th>
+              <th st-sort="artist">Artist</th>
+              <th st-sort="added_by">User</th>
+              <th st-sort-default="reverse" st-sort="added">Added</th>
+            </tr>
+            <tr>
+              <th colspan="2"><input st-search=" " class="form-control" placeholder="Search any playlist field, click column title to sort" type="text"/></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr st-select-row="track" ng-repeat="track in displayedTracks" ng-click="trackSelected(track)" class="table-menu">
+              <td>
+                <i class="track-menu-option glyphicon glyphicon-play" music-player="play" add-song="track"></i>
+                <i class="track-menu-option glyphicon glyphicon-pause" pause-music></i>
+                <i class="track-menu-option glyphicon glyphicon-trash" ng-click="removeTrack(track)"> </i>
+                <!-- <i class="track-menu-option glyphicon glyphicon-comment"> </i> -->
+                <!-- <i class="track-menu-option flaticonNormal" ng-click="changeRating(track)" ng-class="{flaticonBad: track.rating == 0, flaticonNormal: track.rating == 1, flaticonGreat: track.rating == 2}"></i> -->
+                <!-- <i class="track-menu-option save-changes glyphicon glyphicon-remove" ng-class="{'pending_deletion': track.edited}"></i> -->
+              </td>
+              <td>{{track.title}}</td>
+              <td>{{track.artist}}</td>
+              <td>{{track.added_by}}</td>
+              <td>{{track.added | date:'shortDate'}}</td>
+            </tr>
+          </tbody>
+          <!-- <tfoot>
+            <tr>
+              <td colspan="4" class="text-center">
+                <div st-pagination="" st-items-by-page="20"></div>
+              </td>
+            </tr>
+          </tfoot> -->
+        </table>
+      </div>
     </div>
   </div>
 

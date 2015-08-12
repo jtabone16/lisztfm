@@ -24,7 +24,7 @@ tr.table-menu:hover {
 	height: 300px;
 	width: 40%;
 	margin: 5%;
-	margin-bottom: 0%;
+	margin-bottom: 5%;
 	border: 2px #2d6 solid;
 	border-radius: 2%;
 	padding:1%;
@@ -79,12 +79,36 @@ tr.table-menu:hover {
   border-top: 2px #2d6 solid;
 }
 
-.playlist_edit {
+.history {
   border: 2px #2d6 solid;
-  border-radius: 3%;
+  border-radius: 2%;
 	overflow-x: scroll;
 	margin-top: 5%;
 	margin-bottom: 5%;
+	background: rgba(0, 0, 0, 0.3) !important;
+}
+
+.history .playlist_name {
+  font-size: 1.2em;
+  font-weight: bold;
+  padding: 5%;
+	margin-top: 1%;
+	margin-bottom: 1%;
+}
+
+
+.history .track_name {
+  font-size: 1.0em;
+  padding: 3%;
+}
+
+
+.playlist_edit {
+  border: 2px #2d6 solid;
+  border-radius: 2%;
+	overflow-x: scroll;
+	margin-bottom: 5%;
+	background: rgba(0, 0, 0, 0.7) !important;
 }
 
 .playlist_edit .playlist_name {
@@ -108,4 +132,9 @@ tr.table-menu:hover {
   padding: 1%;
   font-size: 0.8em;
   float:right;
+}
+
+.sticky_row {
+	z-index: 1;
+	margin-top: 0;
 }

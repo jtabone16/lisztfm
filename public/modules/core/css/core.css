@@ -27,7 +27,7 @@
 
 .navbar-default .navbar-nav > li > a.active {
   border-top:5px solid #2d6;
-	color: #fff;
+	color: #2d6;
 }
 
 .navbar-default .navbar-nav > li > a.logout {
