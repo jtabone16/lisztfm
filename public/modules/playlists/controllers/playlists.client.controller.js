@@ -237,6 +237,7 @@ angular.module('playlists').controller('PlaylistsController', ['$scope', '$http'
 
 		$scope.addTrack = function ($item, $model, $label) {
 			 var track_uri = $item.uri;
+			 $scope.currentTrack = 'https://embed.spotify.com/?uri=' + track_uri;
 			 var found = false;
 			 var artist = [];
 			 for (var x in $item.artists){
