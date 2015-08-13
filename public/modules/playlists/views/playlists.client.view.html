@@ -1,19 +1,4 @@
 <div class="ng-cloak container-fluid" data-ng-controller="PlaylistsController">
-  <!-- <div sticky class="row" sticky-class="sticky_row">
-
-    <div class="col-xs-6">
-      <div class="playlist_edit" ng-show="tracksToDelete.length > 0">
-        <div class="playlist_name"> Removing {{tracksToDelete.length}} tracks: </div>
-        <div ng-repeat="track in tracksToDelete">
-          <div class="track_name"> <span style="font-weight:bold;">{{track.title}}</span> by {{track.artist}}</div>
-        </div>
-        <button type="button" class="delete_button btn btn-default" ng-model="deleteTracks" ng-click="deleteTracksNow()"btn-checkbox btn-checkbox-true="1" btn-checkbox-false="0">
-            Delete Tracks
-        </button>
-      </div>
-    </div>
-  </div> -->
-
   <div class="row">
     <div class='col-xs-3' ng-show="currentTrack !== ''">
       <iframe ng-src="{{currentTrack}}" width="300" height="80" frameborder="0" allowtransparency="true"></iframe>
@@ -30,7 +15,6 @@
 
 
   <div class="row">
-
     <div class="col-xs-8 col-xs-offset-2">
       <div class="playlist_edit" ng-show="tracksToDelete.length > 0">
         <div class="playlist_name"> Removing {{tracksToDelete.length}} tracks: </div>
@@ -70,10 +54,10 @@
           </div>
         </div>
       </div>
-      <div ng-show="tracksReady" class="col-xs-9 playlist_table_smart">
+      <div ng-show="currentPlaylist !== ''" class="col-xs-9 playlist_table_smart">
         <!-- init sound manager! -->
         <sound-manager></sound-manager>
-        <table ng-show="tracksReady" st-safe-src="tracks" st-table="displayedTracks" class="table table-hover">
+        <table st-safe-src="tracks" st-table="displayedTracks" class="table table-hover">
           <h5 style="text-align: center;">{{currentPlaylist.name}} </h5>
           <thead>
             <tr>
@@ -103,13 +87,6 @@
               <td>{{track.added | date:'shortDate'}}</td>
             </tr>
           </tbody>
-          <!-- <tfoot>
-            <tr>
-              <td colspan="4" class="text-center">
-                <div st-pagination="" st-items-by-page="20"></div>
-              </td>
-            </tr>
-          </tfoot> -->
         </table>
       </div>
     </div>
