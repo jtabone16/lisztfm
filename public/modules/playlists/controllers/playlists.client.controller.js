@@ -215,6 +215,26 @@ angular.module('playlists').controller('PlaylistsController', ['$scope', '$http'
 		// 	}
 		// };
 
+		$scope.dequeue = function (track, action) {
+
+			if (action === 'add'){
+				for(var i in $scope.tracksToAdd){
+					if (track.uri === $scope.tracksToAdd[i].uri){
+						$scope.tracksToAdd.splice(i, 1);
+						break;
+					}
+				}
+			}
+			else if (action === 'remove'){
+				for(var j in $scope.tracksToDelete){
+					if (track.uri === $scope.tracksToDelete[j].uri){
+						$scope.tracksToDelete.splice(j, 1);
+						break;
+					}
+				}
+			}
+		};
+
 		$scope.addTrack = function ($item, $model, $label) {
 			 var track_uri = $item.uri;
 			 var found = false;

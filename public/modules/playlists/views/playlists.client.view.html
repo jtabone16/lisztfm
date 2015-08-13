@@ -41,7 +41,7 @@
               <div class="playlist_edit">
                 <div class="playlist_name"> Removing {{tracksToDelete.length}} track(s): </div>
                 <div ng-repeat="track in tracksToDelete">
-                  <div class="track_name"> <span style="font-weight:bold;">{{track.title}}</span> by {{track.artist}}</div>
+                  <div class="track_name" ng-click="dequeue(track, 'remove')"> <span style="font-weight:bold;">{{track.title}}</span> <span>by {{track.artist}}</span></div>
                 </div>
               </div>
               <button type="button" class="edit_button btn btn-default" ng-model="deleteTracks" ng-click="deleteTracksNow()"btn-checkbox btn-checkbox-true="1" btn-checkbox-false="0">
@@ -55,7 +55,7 @@
               <div class="playlist_edit">
                 <div class="playlist_name"> Adding {{tracksToAdd.length}} track(s): </div>
                 <div ng-repeat="track in tracksToAdd">
-                  <div class="track_name"> <span style="font-weight:bold;">{{track.title}}</span> by {{track.artist}}</div>
+                  <div class="track_name" ng-click="dequeue(track, 'add')"> <span style="font-weight:bold;">{{track.title}}</span> <span>by {{track.artist}}</span></div>
                 </div>
               </div>
               <button type="button" class="edit_button btn btn-default" ng-model="addTracks" ng-click="addTracksNow()" btn-checkbox btn-checkbox-true="1" btn-checkbox-false="0">

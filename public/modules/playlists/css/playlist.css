@@ -160,6 +160,7 @@ tr.table-menu:nth-child(odd):hover, tr.table-menu:nth-child(even):hover {
   color: #fff;
   background: #2d6;
   position: relative;
+	margin-bottom: 10%;
 }
 
 .edit_button:hover {
@@ -229,6 +230,12 @@ tr.table-menu:nth-child(odd):hover, tr.table-menu:nth-child(even):hover {
 .playlist_edit .track_name {
   font-size: 1.0em;
   padding: 2%;
+	cursor: pointer;
+}
+
+.playlist_edit .track_name:hover {
+  text-decoration: line-through;
+	color: red;
 }
 
 .playlist_edit::-webkit-scrollbar {
