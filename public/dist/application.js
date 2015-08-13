@@ -335,15 +335,20 @@ angular.module('playlists').controller('PlaylistsController', ['$scope', '$http'
 		$scope.playlistsReady = false;
 		$scope.tracksReady = false;
 		$scope.currentPlaylist = '';
+		$scope.raw_playlist = '';
 		$scope.tracks = [];
 		$scope.displayedTracks = [];
 		$scope.tracksToDelete = [];
-		$scope.deleteTracks = 0;
 		$scope.currentUser = $window.user;
 		$scope.currentTrack = '';
 		$scope.search_subject =
-		$scope.search_type = 'search';
+		$scope.search_type = 'track';
 		$scope.selected_playlist = undefined;
+		$scope.track_to_add = undefined;
+		$scope.search_results = [];
+		$scope.tracksToAdd = [];
+		$scope.deleteTracks = 0;
+		$scope.addTracks = 0;
 
 
 		$scope.playlist_req = {
@@ -371,27 +376,22 @@ angular.module('playlists').controller('PlaylistsController', ['$scope', '$http'
 		};
 
 
-		$scope.getSearchResults = function (keyEvent){
-			if (keyEvent.which === 13){
+		$scope.getSearchResults = function ($viewValue){
 				$scope.search_req = {
 					 method: 'GET' ,
-					 url: 'https://api.spotify.com/v1/search?q=' + $scope.search_subject.split('%20') + '&type=' + $scope.search_type,
+					 url: 'https://api.spotify.com/v1/search?q=' + $viewValue.split('%20') + '&type=' + $scope.search_type,
 					 headers: {
 						 'Authorization': 'Bearer ' + $window.user.providerData.accessToken
 					 },
 				};
 
-				console.log($scope.search_req);
 
-				$http($scope.search_req).
-					success(function (res){
+				return $http($scope.search_req).
+					then(function (res){
+						$scope.search_results = res.data.tracks.items;
 						console.log(res);
-					}).
-					error(function (res){
-						console.log(res);
+						return $scope.search_results;
 					});
-
-			}
 
 		};
 
@@ -464,6 +464,7 @@ angular.module('playlists').controller('PlaylistsController', ['$scope', '$http'
 							'external_url': trax[i].track.external_urls.spotify,
 							'api_url': trax[i].track.href,
 							'url': trax[i].track.preview_url,
+							'uri': trax[i].track.uri,
 							'id': trax[i].track.id,
 							'explicit': trax[i].track.explicit,
 							'duration': trax[i].track.duration_ms,
@@ -493,8 +494,10 @@ angular.module('playlists').controller('PlaylistsController', ['$scope', '$http'
 			if ($scope.currentPlaylist.name !== plist.name){
 				$scope.tracks = [];
 				$scope.tracksToDelete = [];
+				$scope.tracksToAdd = [];
 				$scope.track_req.url = 'https://api.spotify.com/v1/users/' + plist.owner.id + '/playlists/' +  plist.id + '/tracks';
 				$scope.getTracks($scope.track_req);
+				$scope.raw_playlist = plist;
 
 				$scope.currentPlaylist = {
 					'id': plist.id,
@@ -539,30 +542,103 @@ angular.module('playlists').controller('PlaylistsController', ['$scope', '$http'
 		// 	}
 		// };
 
+		$scope.addTrack = function ($item, $model, $label) {
+			 var track_uri = $item.uri;
+			 var found = false;
+			 var artist = [];
+			 for (var x in $item.artists){
+					 artist.push($item.artists[x].name);
+				 }
 
+			 for (var i = 0; i < $scope.tracksToAdd.length; i++){
+				 if ($scope.tracksToAdd[i].uri === track_uri){
+					 found = true;
+					 $scope.tracksToAdd.splice(i, 1);
+					 break;
+				 }
+			 }
+
+			 if (found === false){
+				 var trak = {
+					 'uri': track_uri,
+					 'artist': artist.join(),
+					 'title': $item.name,
+					 'added': new Date(),
+					 'added_by': $scope.currentUser.username,
+				 };
+				 $scope.tracksToAdd.push(trak);
+			 }
+
+		};
+
+		$scope.addTracksNow = function(){
+			var uris = [];
+			for (var i in $scope.tracksToAdd){
+				uris.push($scope.tracksToAdd[i].uri);
+			}
+
+			var req = {
+				 method: 'POST',
+				 url: 'https://api.spotify.com/v1/users/' + $window.user.username + '/playlists/' + $scope.currentPlaylist.id + '/tracks',
+				 headers: {
+					 'Authorization': 'Bearer ' + $window.user.providerData.accessToken,
+					 'Content-Type': 'application/json'
+				 },
+				 data: {
+					 'uris' : uris
+				 }
+			};
+
+			$http(req).
+				success(function (res){
+					var addedTracks = [];
+					for (var k in $scope.tracksToAdd){
+						var str = $scope.tracksToAdd[k].title + ' by ' + $scope.tracksToAdd[k].artist;
+						addedTracks.push(str);
+					}
+					var snap = {
+						'id': res.snapshot_id,
+						'created': new Date(),
+						'note': 'Added ' + $scope.tracksToAdd.length + ' tracks (' + addedTracks.join() + ') from ' + $scope.currentPlaylist.name
+					};
+					$scope.currentPlaylist.snapshots.push(snap);
+
+					$http.post('/user/playlist/add', $scope.currentPlaylist).
+						success(function(res){
+							for (var x in $scope.tracksToAdd){
+								$scope.tracks.push($scope.tracksToAdd[x]);
+							}
+							$scope.tracksToAdd = [];
+						}).
+						error(function(res){
+							console.log('Error updating playlist in database');
+						});
+				}).
+				error(function (res){
+					console.log(res);
+				});
+
+		};
 
 
 		$scope.removeTrack = function(track){
-			var track_uri = 'spotify:track:' + track.id;
 			var found = false;
 
 			for (var i = 0; i < $scope.tracksToDelete.length; i++){
-				if ($scope.tracksToDelete[i].uri === track_uri){
+				if ($scope.tracksToDelete[i].uri === track.uri){
 					found = true;
 					$scope.tracksToDelete.splice(i, 1);
-					track.edited = false;
 					break;
 				}
 			}
 
 			if (found === false){
 				var trak = {
-					'uri': track_uri,
+					'uri': track.uri,
 					'artist': track.artist,
 					'title': track.title,
 				};
 				$scope.tracksToDelete.push(trak);
-				track.edited = true;
 			}
 		};
 
@@ -591,12 +667,20 @@ angular.module('playlists').controller('PlaylistsController', ['$scope', '$http'
 						'created': new Date(),
 						'note': 'Deleted ' + $scope.tracksToDelete.length + ' tracks (' + deletedTracks.join() + ') from ' + $scope.currentPlaylist.name
 					};
-					$scope.tracksToDelete = [];
 					$scope.currentPlaylist.snapshots.push(snap);
 
 					$http.post('/user/playlist/add', $scope.currentPlaylist).
 						success(function(res){
-							$state.reload();
+
+							for (var y in $scope.tracksToDelete){
+								for (var x in $scope.tracks){
+									if($scope.tracks[x].uri === $scope.tracksToDelete[y].uri){
+										$scope.tracks.splice(x, 1);
+										break;
+									}
+								}
+							}
+							$scope.tracksToDelete = [];
 						}).
 						error(function(res){
 							console.log('Error updating playlist in database');
@@ -609,7 +693,7 @@ angular.module('playlists').controller('PlaylistsController', ['$scope', '$http'
 		};
 
 		$scope.onSelect = function ($item, $model, $label) {
-			 $scope.getCurrentPlaylist($item)
+			 $scope.getCurrentPlaylist($item);
 		};
 
 
