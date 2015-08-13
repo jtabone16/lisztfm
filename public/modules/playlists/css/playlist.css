@@ -98,18 +98,6 @@ tr.table-menu:hover {
 	border-radius: 3%;
 }
 
-.playlist_table {
-	height: 300px;
-	width: 40%;
-	margin: 5%;
-	margin-bottom: 5%;
-	border: 2px #2d6 solid;
-	border-radius: 2%;
-	padding:1%;
-	overflow: auto;
-	background: rgba(0, 0, 0, 0.3) !important;
-}
-
 .playlist_table_smart {
 	height: 500px;
 	/*border: 2px #2d6 solid;*/
@@ -117,6 +105,16 @@ tr.table-menu:hover {
 	padding:1%;
 	overflow-x: scroll;
 	background: rgba(0, 0, 0, 0.3) !important;
+}
+
+.playlist_table_smart::-webkit-scrollbar {
+    -webkit-appearance: none;
+    width: 3%;
+}
+.playlist_table_smart::-webkit-scrollbar-thumb {
+    border-radius: 4px;
+		border: 2px #2d6 ridge;
+    background-color: rgba(0,0,0,.4);
 }
 
 .track-menu-option {
@@ -156,12 +154,23 @@ tr.table-menu:hover {
 }
 
 .history {
+	height: 150px;
   border: 2px #2d6 solid;
   border-radius: 2%;
-	overflow-x: scroll;
+	overflow-y: scroll;
 	margin-top: 5%;
 	margin-bottom: 5%;
 	background: rgba(0, 0, 0, 0.3) !important;
+}
+
+.history::-webkit-scrollbar {
+    -webkit-appearance: none;
+    width: 3%;
+}
+.history::-webkit-scrollbar-thumb {
+    border-radius: 4px;
+		border: 2px #2d6 ridge;
+    background-color: rgba(0,0,0,.4);
 }
 
 .history .playlist_name {
