@@ -103,13 +103,6 @@ a {
     color: #000;
 }
 
-tr.table-menu:hover {
-  color: #fff;
-  background: #2d6 !important;
-	border: 2px #2d6 solid;
-	border-radius: 3%;
-}
-
 .playlist_table_smart {
 	height: 500px;
 	/*border: 2px #2d6 solid;*/
@@ -119,8 +112,17 @@ tr.table-menu:hover {
 	background: rgba(0, 0, 0, 0.3) !important;
 }
 
+tr.table-menu:nth-child(odd) {
+  background: rgba(0, 0, 0, 0.3) !important;
+}
+
 tr.table-menu:nth-child(even) {
   background: rgba(0, 0, 0, 0.1) !important;
+}
+
+tr.table-menu:nth-child(odd):hover, tr.table-menu:nth-child(even):hover {
+	border: 2px #2d6 solid;
+	border-radius: 3%;
 }
 
 .playlist_table_smart::-webkit-scrollbar {
