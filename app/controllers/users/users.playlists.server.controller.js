@@ -16,7 +16,6 @@ var _ = require('lodash'),
 exports.addPlaylist = function(req, res){
 	var playlist = req.body;
 
-	console.log(playlist);
 
 	Playlist.findOne({'id': playlist.id},
 		function(err, plist){
