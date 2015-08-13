@@ -293,7 +293,7 @@ angular.module('playlists').controller('PlaylistsController', ['$scope', '$http'
 					var snap = {
 						'id': res.snapshot_id,
 						'created': new Date(),
-						'note': 'Added ' + $scope.tracksToAdd.length + ' tracks (' + addedTracks.join() + ') from ' + $scope.currentPlaylist.name
+						'note': 'Added ' + $scope.tracksToAdd.length + ' track(s) (' + addedTracks.join() + ') to ' + $scope.currentPlaylist.name
 					};
 					$scope.currentPlaylist.snapshots.push(snap);
 
@@ -359,7 +359,7 @@ angular.module('playlists').controller('PlaylistsController', ['$scope', '$http'
 					var snap = {
 						'id': res.snapshot_id,
 						'created': new Date(),
-						'note': 'Deleted ' + $scope.tracksToDelete.length + ' tracks (' + deletedTracks.join() + ') from ' + $scope.currentPlaylist.name
+						'note': 'Deleted ' + $scope.tracksToDelete.length + ' track(s) (' + deletedTracks.join() + ') from ' + $scope.currentPlaylist.name
 					};
 					$scope.currentPlaylist.snapshots.push(snap);
 
