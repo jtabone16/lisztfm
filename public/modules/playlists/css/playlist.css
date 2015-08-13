@@ -5,6 +5,43 @@
 	border: 1px #2d6 solid;
 	border-radius: 3%;
 	box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(34,221,102, 0.6);
+	text-transform: lowercase;
+}
+
+.table-title {
+	width: 30%;
+	height: 12%;
+	text-align: center;
+	color: #2d6;
+	padding: 2%;
+	text-transform: lowercase;
+	font-size: 1.4em;
+	border: 1px #2d6 solid;
+	border-radius: 4%;
+	box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(34,221,102, 0.5);
+	border-left: 50%;
+	margin-left: 35%;
+	margin-bottom: 3%;
+	margin-top: 1%;
+}
+
+.playlist-header i{
+	color: #2d6;
+	font-size: 1.0em;
+	float: left;
+	padding-right: 5%;
+	cursor: pointer;
+}
+
+.playlist-header .table-header{
+	color: #2d6;
+	font-size: 1.0em;
+	float: none;
+	cursor: pointer;
+}
+
+.playlist-header .glyphicon:hover, .playlist-header .table-header:hover{
+	text-shadow: 0px -3px 20px rgba(34, 221, 102, 0.7);
 }
 
 .background-main {
@@ -38,11 +75,15 @@
 	cursor: pointer;
 }
 
-td { break-word: word-wrap; }
+td {
+	 break-word: word-wrap;
+ }
 
 .st-selected{
   background: #2d6 !important;
   color: #fff;
+	border: 2px #2d6 solid;
+	border-radius: 3%;
 }
 
 a {
@@ -53,6 +94,8 @@ a {
 tr.table-menu:hover {
   color: #fff;
   background: #2d6 !important;
+	border: 2px #2d6 solid;
+	border-radius: 3%;
 }
 
 .playlist_table {
@@ -68,15 +111,13 @@ tr.table-menu:hover {
 }
 
 .playlist_table_smart {
-	height: 300px;
-	border: 2px #2d6 solid;
+	height: 500px;
+	/*border: 2px #2d6 solid;*/
 	border-radius: 2%;
 	padding:1%;
 	overflow-x: scroll;
 	background: rgba(0, 0, 0, 0.3) !important;
 }
-
-
 
 .track-menu-option {
   cursor: pointer;

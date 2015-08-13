@@ -58,14 +58,26 @@
         <!-- init sound manager! -->
         <sound-manager></sound-manager>
         <table st-safe-src="tracks" st-table="displayedTracks" class="table table-hover">
-          <h5 style="text-align: center;">{{currentPlaylist.name}} </h5>
+          <div class="table-title">{{currentPlaylist.name}} </div>
           <thead>
             <tr>
               <th></th>
-              <th st-sort="name">Song</th>
-              <th st-sort="artist">Artist</th>
-              <th st-sort="added_by">User</th>
-              <th st-sort-default="reverse" st-sort="added">Added</th>
+              <th class="playlist-header" st-sort="name">
+                <i class="glyphicon glyphicon-sort"> </i>
+                <div class="table-header">song</div>
+              </th>
+              <th class="playlist-header" st-sort="artist">
+                <i class="glyphicon glyphicon-sort"> </i>
+                <div class="table-header">artist</div>
+              </th>
+              <th class="playlist-header" st-sort="added_by">
+                <i class="glyphicon glyphicon-sort"> </i>
+                <div class="table-header">user</div>
+              </th>
+              <th class="playlist-header" st-sort-default="reverse" st-sort="added">
+                <i class="glyphicon glyphicon-sort"> </i>
+                <div class="table-header">added</div>
+              </th>
             </tr>
             <tr>
               <th colspan="2"><input st-search=" " class="form-control" placeholder="Search any playlist field, click column title to sort" type="text"/></th>
