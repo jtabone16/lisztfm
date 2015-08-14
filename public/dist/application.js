@@ -732,6 +732,41 @@ angular.module('playlists').controller('PlaylistsController', ['$scope', '$http'
 
 'use strict';
 
+angular.module('playlists').directive('focus',
+
+["$timeout", function($timeout) {
+
+return {
+
+scope : {
+
+ trigger : '@focus'
+
+ },
+
+ link : function(scope, element) {
+
+ scope.$watch('trigger', function(value) {
+
+  if (value === "true") {
+
+   $timeout(function() {
+
+   element[0].focus();
+
+   });
+  }
+ });
+   }
+
+  };
+
+ }]
+
+);
+
+'use strict';
+
 // Config HTTP Error Handling
 angular.module('users').config(['$httpProvider',
 	function($httpProvider) {

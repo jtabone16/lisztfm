@@ -8,7 +8,7 @@
         <div class="row">
           <div class="col-xs-12">
             <h4>search playlists you own</h4>
-            <input type="text" ng-model="selected_playlist" typeahead="playlist.name for playlist in playlists | filter:$viewValue | filter:isOwned" typeahead-on-select="onSelect($item, $model, $label)" class="form-control playlist-search">
+            <input focus="true" type="text" ng-model="selected_playlist" typeahead="playlist.name for playlist in playlists | filter:$viewValue | filter:isOwned" typeahead-on-select="onSelect($item, $model, $label)" class="form-control playlist-search">
           </div>
           <div class="col-xs-12" ng-show="tracksReady">
             <h4>search + add tracks</h4>
