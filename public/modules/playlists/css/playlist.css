@@ -1,3 +1,40 @@
+.playlist-list {
+	overflow-y: scroll;
+	/*border: 1px #2d6 solid;*/
+	border-radius: 5px;
+	height: 175px;
+	margin-bottom: 5%;
+	overflow: auto;
+	background: rgba(0, 0, 0, 0.3) !important;
+}
+/*+.playlist_table {
++	height: 300px;
++	width: 40%;
++	margin: 5%;
++	margin-bottom: 0%;
++	border: 2px #2d6 solid;
++	border-radius: 2%;
++	padding:1%;
++	overflow: auto;
++	background: rgba(0, 0, 0, 0.3) !important;
++}*/
+
+
+.playlist-list::-webkit-scrollbar {
+    -webkit-appearance: none;
+    width: 3%;
+}
+.playlist-list::-webkit-scrollbar-thumb {
+    border-radius: 4px;
+		border: 2px #2d6 ridge;
+    background-color: rgba(0,0,0,.4);
+}
+
+.spotify-player {
+	margin: 3%;
+	border-radius:
+}
+
 .form-control.playlist-search{
 	background: rgba(0, 0, 0, 0.3) !important;
 	color: #2d6;
