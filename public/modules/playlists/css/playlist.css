@@ -1,3 +1,9 @@
+.tooltip-inner {
+    background: rgba(0, 0, 0, 0.5) !important;
+		width: 100px !important;
+		padding: 5%;		
+}
+
 .playlist-list {
 	overflow-y: scroll;
 	/*border: 1px #2d6 solid;*/
@@ -7,18 +13,27 @@
 	overflow: auto;
 	background: rgba(0, 0, 0, 0.3) !important;
 }
-/*+.playlist_table {
-+	height: 300px;
-+	width: 40%;
-+	margin: 5%;
-+	margin-bottom: 0%;
-+	border: 2px #2d6 solid;
-+	border-radius: 2%;
-+	padding:1%;
-+	overflow: auto;
-+	background: rgba(0, 0, 0, 0.3) !important;
-+}*/
 
+.form-control.create-playlist-field {
+	background: rgba(0, 0, 0, 0.3) !important;
+	color: #2d6;
+	width: 100px;
+	margin-left: 30%;
+	margin-top: 10%;
+	border: 1px #2d6 solid;
+	border-radius: 5px;
+	box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(34,221,102, 0.6);
+	text-transform: lowercase;
+}
+
+.create-playlist {
+	cursor: pointer;
+	background: rgba(0, 0, 0, 0.3) !important;
+	padding: 15%;
+	/*margin-left: 20%;*/
+	border-radius: 5px;
+	border: 1px rgba(34,221,102, 1.0) solid;
+}
 
 .playlist-list::-webkit-scrollbar {
     -webkit-appearance: none;
@@ -41,7 +56,7 @@
 	margin-bottom: 5%;
 	margin-top: 3%;
 	border: 1px #2d6 solid;
-	border-radius: 3%;
+	border-radius: 5px;
 	box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(34,221,102, 0.6);
 	text-transform: lowercase;
 }

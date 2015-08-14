@@ -16,7 +16,7 @@ scope : {
 
  scope.$watch('trigger', function(value) {
 
-  if (value === "true") {
+  if (value === 'true') {
 
    $timeout(function() {
 

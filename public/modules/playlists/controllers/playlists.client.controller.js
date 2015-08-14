@@ -11,6 +11,7 @@ angular.module('playlists').controller('PlaylistsController', ['$scope', '$http'
 		$scope.raw_playlist = '';
 		$scope.tracks = [];
 		$scope.displayedTracks = [];
+		$scope.displayedPlaylists = [];
 		$scope.tracksToDelete = [];
 		$scope.currentUser = $window.user;
 		$scope.currentTrack = '';
@@ -22,6 +23,8 @@ angular.module('playlists').controller('PlaylistsController', ['$scope', '$http'
 		$scope.tracksToAdd = [];
 		$scope.deleteTracks = 0;
 		$scope.addTracks = 0;
+		$scope.showCreateField = false;
+		$scope.newPlaylistName = '';
 
 
 		$scope.playlist_req = {
@@ -46,6 +49,31 @@ angular.module('playlists').controller('PlaylistsController', ['$scope', '$http'
 			 headers: {
 				 'Authorization': 'Bearer ' + $window.user.providerData.accessToken
 			 },
+		};
+
+		$scope.createPlaylist = function (keyEvent, name) {
+			if (keyEvent.which === 13){
+				var req = {
+					 method: 'POST',
+					 url: 'https://api.spotify.com/v1/users/' + $window.user.username + '/playlists',
+					 headers: {
+						 'Authorization': 'Bearer ' + $window.user.providerData.accessToken,
+						 'Content-Type': 'application/json'
+					 },
+					 data: {
+						 'name' : name
+					 }
+				};
+
+				$http(req).
+					then (function (res){
+						console.log(res);
+						$scope.playlists.unshift(res.data);
+						$scope.getCurrentPlaylist(res.data);
+						$scope.showCreateField = false;
+						$scope.newPlaylistName = '';
+					});
+			}
 		};
 
 
