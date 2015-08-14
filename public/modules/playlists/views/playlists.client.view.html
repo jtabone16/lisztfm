@@ -7,7 +7,7 @@
       <div class="col-xs-6 col-xs-offset-1">
         <div class="row">
           <div class="col-xs-12">
-            <h4>search playlists you own <span tooltip="Spotify's web API limits collaborative playlist edits to playlist owners :(" tooltip-trigger tooltip-placement="right" style="color:#2d6;">(and can edit):</span></h4>
+            <h4>search playlists you own</h4>
             <input type="text" ng-model="selected_playlist" typeahead="playlist.name for playlist in playlists | filter:$viewValue | filter:isOwned" typeahead-on-select="onSelect($item, $model, $label)" class="form-control playlist-search">
           </div>
           <div class="col-xs-12" ng-show="tracksReady">
@@ -67,7 +67,7 @@
       </div>
       <div ng-show="currentPlaylist !== ''" class="col-xs-9 playlist_table_smart">
         <!-- init sound manager! -->
-        <sound-manager></sound-manager>
+        <!-- <sound-manager></sound-manager> -->
         <table st-safe-src="tracks" st-table="displayedTracks" class="table table-hover">
           <div class="table-title">{{currentPlaylist.name}} </div>
           <thead>
@@ -97,8 +97,8 @@
           <tbody>
             <tr st-select-row="track" ng-repeat="track in displayedTracks" ng-click="trackSelected(track)" class="table-menu">
               <td>
-                <i class="track-menu-option glyphicon glyphicon-play" music-player="play" add-song="track"></i>
-                <i class="track-menu-option glyphicon glyphicon-pause" pause-music></i>
+                <!-- <i class="track-menu-option glyphicon glyphicon-play" music-player="play" add-song="track"></i> -->
+                <!-- <i class="track-menu-option glyphicon glyphicon-pause" pause-music></i> -->
                 <i class="track-menu-option glyphicon glyphicon-trash" ng-click="removeTrack(track)"> </i>
                 <!-- <i class="track-menu-option glyphicon glyphicon-comment"> </i> -->
                 <!-- <i class="track-menu-option flaticonNormal" ng-click="changeRating(track)" ng-class="{flaticonBad: track.rating == 0, flaticonNormal: track.rating == 1, flaticonGreat: track.rating == 2}"></i> -->
