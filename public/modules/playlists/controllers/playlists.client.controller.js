@@ -25,6 +25,7 @@ angular.module('playlists').controller('PlaylistsController', ['$scope', '$http'
 		$scope.addTracks = 0;
 		$scope.showCreateField = false;
 		$scope.newPlaylistName = '';
+		$scope.queueSelected = undefined;
 
 
 		$scope.playlist_req = {
@@ -289,6 +290,7 @@ angular.module('playlists').controller('PlaylistsController', ['$scope', '$http'
 					 'added_by': $scope.currentUser.username,
 				 };
 				 $scope.tracksToAdd.push(trak);
+				 $scope.queueSelected = 'adding';
 			 }
 
 		};
@@ -361,6 +363,7 @@ angular.module('playlists').controller('PlaylistsController', ['$scope', '$http'
 					'title': track.title,
 				};
 				$scope.tracksToDelete.push(trak);
+				$scope.queueSelected = 'removing';
 			}
 		};
 

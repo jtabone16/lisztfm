@@ -63,32 +63,37 @@
             </div>
           </div>
 
-          <div class="col-xs-12">
-            <div ng-show="tracksToDelete.length > 0" class="playlist_edit_wrapper">
-              <div class="playlist_edit">
-                <div class="playlist_name"> Removing {{tracksToDelete.length}} track(s): </div>
-                <div ng-repeat="track in tracksToDelete">
-                  <div class="track_name" ng-click="dequeue(track, 'remove')"> <span style="font-weight:bold;">{{track.title}}</span> <span>by {{track.artist}}</span></div>
+          <div class="col-xs-12" ng-show="tracksToDelete.length > 0 || tracksToAdd.length > 0">
+            <div class="playlist_edit">
+                <div class="row">
+                  <div class="col-xs-6">
+                    <button class="queue-select-button" ng-class="{'queue-select-button-active': queueSelected === 'removing'}" ng-click="queueSelected = 'removing'">Removing</button>
+                  </div>
+                  <div class="col-xs-6">
+                    <button class="queue-select-button" ng-class="{'queue-select-button-active': queueSelected === 'adding'}" ng-click="queueSelected = 'adding'">Adding</button>
+                  </div>
                 </div>
-              </div>
-              <button type="button" class="edit_button btn btn-default" ng-model="deleteTracks" ng-click="deleteTracksNow()"btn-checkbox btn-checkbox-true="1" btn-checkbox-false="0">
-                  Delete Tracks
-              </button>
+                <div class="row">
+                  <div class="col-xs-12" ng-show="queueSelected === 'removing' && tracksToDelete.length > 0">
+                    <div ng-repeat="track in tracksToDelete">
+                      <div class="track_name" ng-click="dequeue(track, 'remove')"> <span style="font-weight:bold;">{{track.title}}</span> <span>by {{track.artist}}</span></div>
+                    </div>
+                  </div>
+                  <div class="col-xs-12" ng-show="queueSelected === 'adding' && tracksToAdd.length > 0">
+                    <div ng-repeat="track in tracksToAdd">
+                      <div class="track_name" ng-click="dequeue(track, 'add')"> <span style="font-weight:bold;">{{track.title}}</span> <span>by {{track.artist}}</span></div>
+                    </div>
+                  </div>
+                </div>
             </div>
           </div>
-
           <div class="col-xs-12">
-            <div ng-show="tracksToAdd.length > 0" class="playlist_edit_wrapper">
-              <div class="playlist_edit">
-                <div class="playlist_name"> Adding {{tracksToAdd.length}} track(s): </div>
-                <div ng-repeat="track in tracksToAdd">
-                  <div class="track_name" ng-click="dequeue(track, 'add')"> <span style="font-weight:bold;">{{track.title}}</span> <span>by {{track.artist}}</span></div>
-                </div>
-              </div>
-              <button type="button" class="edit_button btn btn-default" ng-model="addTracks" ng-click="addTracksNow()" btn-checkbox btn-checkbox-true="1" btn-checkbox-false="0">
-                  Add Tracks
-              </button>
-            </div>
+            <button type="button" class="edit_button btn btn-default" ng-show="queueSelected === 'removing' && tracksToDelete.length > 0" ng-model="deleteTracks" ng-click="deleteTracksNow()">
+              Delete Tracks
+            </button>
+            <button type="button" class="edit_button btn btn-default" ng-show="queueSelected === 'adding' && tracksToAdd.length > 0" ng-model="addTracks" ng-click="addTracksNow()">
+              Add Tracks
+            </button>
           </div>
         </div>
       </div>

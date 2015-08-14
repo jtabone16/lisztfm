@@ -1,7 +1,29 @@
+
+.queue-select-button{
+	background: none;
+	color: #fff;
+	padding: 5%;
+	border: 0px;
+}
+
+.queue-select-button-active{
+	background: none;
+	color: #2d6;
+	padding: 5%;
+	border: 0px;
+}
+
+.queue-select-button:hover{
+	background: none;
+	color: #2d6;
+	padding: 5%;
+	border: 0px;
+}
+
 .tooltip-inner {
     background: rgba(0, 0, 0, 0.5) !important;
 		width: 100px !important;
-		padding: 5%;		
+		padding: 5%;
 }
 
 .playlist-list {
@@ -217,6 +239,7 @@ tr.table-menu:nth-child(odd):hover, tr.table-menu:nth-child(even):hover {
 
 .edit_button:hover {
   border: 0px;
+	border-top: 1px #2d6 solid;
   border-top-left-radius: 0px;
   border-top-right-radius: 0px;
   width: 100%;
@@ -261,12 +284,13 @@ tr.table-menu:nth-child(odd):hover, tr.table-menu:nth-child(even):hover {
 
 
 .playlist_edit {
-	height: 150px;
+	height: 200px;
   border: 2px #2d6 solid;
-  border-radius: 2%;
+  border-radius: 5px;
 	border-bottom-left-radius: 0px;
 	border-bottom-right-radius: 0px;
 	overflow-y: scroll;
+	overflow-x: hidden;
 	background: rgba(0, 0, 0, 0.3) !important;
 }
 
