@@ -117,7 +117,7 @@ angular.module('core').controller('LayoutController', ['$scope', '$location',
 		function($scope, $location) {
 
 			$scope.showHeader = function() {
-				var header_pages = ['/playlists'];
+				var header_pages = ['/playlists', '/profile'];
 				if (header_pages.indexOf($location.path()) >= 0) {
 					return true;
 				} else {
@@ -833,6 +833,10 @@ angular.module('users').config(['$stateProvider',
 	function($stateProvider) {
 		// Users state routing
 		$stateProvider.
+		state('default', {
+			url: '/profile',
+			templateUrl: 'modules/users/views/profile.client.view.html'
+		}).
 		state('profile', {
 			url: '/settings/profile',
 			templateUrl: 'modules/users/views/settings/edit-profile.client.view.html'
@@ -871,6 +875,7 @@ angular.module('users').config(['$stateProvider',
 		});
 	}
 ]);
+
 'use strict';
 
 angular.module('users').controller('AuthenticationController', ['$scope', '$http', '$location', '$window', 'Authentication',
@@ -1023,6 +1028,22 @@ angular.module('users').controller('SettingsController', ['$scope', '$http', '$l
 		};
 	}
 ]);
+'use strict';
+
+angular.module('users').controller('UsersController', ['$state', '$scope', '$http', '$window', '$location', 'Authentication',
+  function($state, $scope, $http, $window, $location, Authentication) {
+    if($window.user === '') {
+        $location.path('/signin');
+    }
+
+    $scope.user = $window.user;
+    $scope.avatar = $window.user.providerData.images.url;
+
+
+
+  }
+]);
+
 'use strict';
 
 // Authentication service for user variables

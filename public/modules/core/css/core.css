@@ -30,9 +30,14 @@
 	color: #2d6;
 }
 
-.navbar-default .navbar-nav > li > a.logout {
-  color: #FFFFFF;
+.navbar-default .navbar-nav > li > a.signout:active {
+  border-top:5px solid #f55;
+  color: #f55;
+}
 
+.navbar-default .navbar-nav > li > a.signout:hover {
+  border-top:5px solid #f55;
+  color: #f55;
 }
 
 #page-header-mobile {
