@@ -2,6 +2,10 @@
   <img src="/modules/users/img/profile_header.jpeg" class="img-responsive" alt="Responsive image">
 </div> -->
 
-<div class="container-fluid" ng-controller="UsersController">
-  <img ng-src="{{avatar}}">
+<div class="container-fluid profile-area" ng-controller="UsersController">
+  <div class="row">
+    <div class="username"> {{user.username}} </div>
+    <img class="avatar" ng-src="{{avatar}}">
+
+  </div>
 </div> <!-- container end -->

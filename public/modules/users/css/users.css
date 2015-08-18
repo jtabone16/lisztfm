@@ -56,6 +56,27 @@ body {
   margin:auto;
 }
 
+/*Profile Page*/
+.profile-area{
+	border: 2px #2d6 solid;
+	border-radius: 10px;
+	background: rgba(0, 0, 0, 0.3) !important;
+}
+
+.avatar{
+	border-radius: 30px;
+	margin: 4%;
+	width: 20%;
+	height: 20%:
+
+}
+
+.username {
+	font-size: 1.5em;
+	padding: 4%;
+	padding-bottom: 0;
+}
+
 
 /* ==========================================
 
