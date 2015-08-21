@@ -26,6 +26,7 @@ angular.module('playlists').controller('PlaylistsController', ['$scope', '$http'
 		$scope.showCreateField = false;
 		$scope.newPlaylistName = '';
 		$scope.queueSelected = undefined;
+		$scope.total_track_length = 0;
 
 
 		$scope.playlist_req = {
@@ -50,6 +51,12 @@ angular.module('playlists').controller('PlaylistsController', ['$scope', '$http'
 			 headers: {
 				 'Authorization': 'Bearer ' + $window.user.providerData.accessToken
 			 },
+		};
+
+		$scope.millisToMinutesAndSeconds = function (millis) {
+  		var minutes = Math.floor(millis / 60000);
+  		var seconds = ((millis % 60000) / 1000).toFixed(0);
+  		return minutes + ':' + (seconds < 10 ? '0' : '') + seconds;
 		};
 
 		$scope.createPlaylist = function (keyEvent, name) {
@@ -174,6 +181,7 @@ angular.module('playlists').controller('PlaylistsController', ['$scope', '$http'
 							'artist': artist.join(),
 							'rating': 1
 						};
+						$scope.total_track_length += track.duration;
 						$scope.tracks.push(track);
 					}
 
@@ -200,6 +208,8 @@ angular.module('playlists').controller('PlaylistsController', ['$scope', '$http'
 				$scope.track_req.url = 'https://api.spotify.com/v1/users/' + plist.owner.id + '/playlists/' +  plist.id + '/tracks';
 				$scope.getTracks($scope.track_req);
 				$scope.raw_playlist = plist;
+
+				$scope.total_track_length = 0;
 
 				$scope.currentPlaylist = {
 					'id': plist.id,

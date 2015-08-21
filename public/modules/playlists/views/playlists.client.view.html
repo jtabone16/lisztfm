@@ -108,7 +108,16 @@
               </div>
             </div>
             <div class="col-xs-12">
-              <div class="table-title">{{currentPlaylist.name}} </div>
+              <div class="row">
+                <div class="col-xs-3">
+                  <div> Total Tracks: <span style="color:#2d6">{{currentPlaylist.track_total}}</span></div>
+                  <div> Avg. Track length: <span style="color:#2d6">{{millisToMinutesAndSeconds(total_track_length/currentPlaylist.track_total)}}</span></div>
+                </div>
+
+                <div class="col-xs-6">
+                  <div class="table-title">{{currentPlaylist.name}} </div>
+                </div>
+              </div>
             </div>
           </div>
           <thead>
@@ -132,7 +141,9 @@
               </th>
             </tr>
             <tr>
-              <th colspan="2"><input st-search=" " class="form-control playlist-search" placeholder="search for any field" type="text"/></th>
+              <th colspan="6">
+                <input st-search=" " class="form-control playlist-search" placeholder="search for any field" type="text"/>
+              </th>
             </tr>
           </thead>
           <tbody>
