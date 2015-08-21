@@ -58,7 +58,7 @@
             <div class="history" ng-show="currentPlaylist.snapshots.length > 0">
               <div class="playlist_name"> Playlist History </div>
               <div ng-repeat="snap in currentPlaylist.snapshots">
-                <div class="track_name"> <span style="font-weight:500; color:#2d6;">{{snap.created | date:'shortDate'}}</span> {{snap.note}}</div>
+                <div ng-click="revert(snap)" class="track_name"> <span style="font-weight:500; color:#2d6;">{{snap.created | date:'shortDate'}}</span> {{snap.note}}</div>
               </div>
             </div>
           </div>

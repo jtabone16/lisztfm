@@ -353,6 +353,8 @@ angular.module('playlists').controller('PlaylistsController', ['$scope', '$http'
 		$scope.showCreateField = false;
 		$scope.newPlaylistName = '';
 		$scope.queueSelected = undefined;
+		$scope.total_track_length = 0;
+		$scope.currentArtists = [];
 
 
 		$scope.playlist_req = {
@@ -377,6 +379,28 @@ angular.module('playlists').controller('PlaylistsController', ['$scope', '$http'
 			 headers: {
 				 'Authorization': 'Bearer ' + $window.user.providerData.accessToken
 			 },
+		};
+
+		$scope.revert = function (snap) {
+			console.log(snap);
+		};
+
+		$scope.topArtist = function (currentArtists) {
+			var max = 0;
+			var artist = '';
+			for(var k in currentArtists){
+				if(currentArtists[k] > max) {
+					max = currentArtists[k];
+					artist = k;
+				}
+			}
+			return artist;
+		};
+
+		$scope.millisToMinutesAndSeconds = function (millis) {
+  		var minutes = Math.floor(millis / 60000);
+  		var seconds = ((millis % 60000) / 1000).toFixed(0);
+  		return minutes + ':' + (seconds < 10 ? '0' : '') + seconds;
 		};
 
 		$scope.createPlaylist = function (keyEvent, name) {
@@ -479,6 +503,7 @@ angular.module('playlists').controller('PlaylistsController', ['$scope', '$http'
 						var added_by = '';
 						for (var x in trax[i].track.artists){
 								artist.push(trax[i].track.artists[x].name);
+								$scope.currentArtists[trax[i].track.artists[x].name] = (isNaN($scope.currentArtists[trax[i].track.artists[x].name]) ? 1 : $scope.currentArtists[trax[i].track.artists[x].name] + 1);
 							}
 						if (trax[i].added_by !== null){
 							added_by = trax[i].added_by.id;
@@ -501,6 +526,7 @@ angular.module('playlists').controller('PlaylistsController', ['$scope', '$http'
 							'artist': artist.join(),
 							'rating': 1
 						};
+						$scope.total_track_length += track.duration;
 						$scope.tracks.push(track);
 					}
 
@@ -527,6 +553,9 @@ angular.module('playlists').controller('PlaylistsController', ['$scope', '$http'
 				$scope.track_req.url = 'https://api.spotify.com/v1/users/' + plist.owner.id + '/playlists/' +  plist.id + '/tracks';
 				$scope.getTracks($scope.track_req);
 				$scope.raw_playlist = plist;
+
+				$scope.total_track_length = 0;
+				$scope.currentArtists = [];
 
 				$scope.currentPlaylist = {
 					'id': plist.id,
@@ -643,14 +672,22 @@ angular.module('playlists').controller('PlaylistsController', ['$scope', '$http'
 			$http(req).
 				success(function (res){
 					var addedTracks = [];
+					var track_info = [];
 					for (var k in $scope.tracksToAdd){
+						track_info.push({
+							'title': $scope.tracksToAdd[k].title,
+							'artist': $scope.tracksToAdd[k].artist,
+							'uri': $scope.tracksToAdd[k].uri
+						});
 						var str = $scope.tracksToAdd[k].title + ' by ' + $scope.tracksToAdd[k].artist;
 						addedTracks.push(str);
 					}
 					var snap = {
 						'id': res.snapshot_id,
 						'created': new Date(),
-						'note': 'Added ' + $scope.tracksToAdd.length + ' track(s) (' + addedTracks.join() + ') to ' + $scope.currentPlaylist.name
+						'note': 'Added ' + $scope.tracksToAdd.length + ' track(s) (' + addedTracks.join() + ') to ' + $scope.currentPlaylist.name,
+						'type': 'add',
+						'tracks': track_info
 					};
 					$scope.currentPlaylist.snapshots.push(snap);
 
@@ -710,14 +747,22 @@ angular.module('playlists').controller('PlaylistsController', ['$scope', '$http'
 			$http(req).
 				success(function (res){
 					var deletedTracks = [];
+					var track_info = [];
 					for (var k in $scope.tracksToDelete){
+						track_info.push({
+							'title': $scope.tracksToDelete[k].title,
+							'artist': $scope.tracksToDelete[k].artist,
+							'uri': $scope.tracksToDelete[k].uri
+						});
 						var str = $scope.tracksToDelete[k].title + ' by ' + $scope.tracksToDelete[k].artist;
 						deletedTracks.push(str);
 					}
 					var snap = {
 						'id': res.snapshot_id,
 						'created': new Date(),
-						'note': 'Deleted ' + $scope.tracksToDelete.length + ' track(s) (' + deletedTracks.join() + ') from ' + $scope.currentPlaylist.name
+						'note': 'Deleted ' + $scope.tracksToDelete.length + ' track(s) (' + deletedTracks.join() + ') from ' + $scope.currentPlaylist.name,
+						'type': 'delete',
+						'tracks': track_info
 					};
 					$scope.currentPlaylist.snapshots.push(snap);
 
@@ -1037,7 +1082,7 @@ angular.module('users').controller('UsersController', ['$state', '$scope', '$htt
     }
 
     $scope.user = $window.user;
-    $scope.avatar = $window.user.providerData.images.url;
+    $scope.avatar = $scope.user.providerData.images[0].url;
 
 
 

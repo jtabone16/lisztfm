@@ -21,7 +21,13 @@ var PlaylistSchema = new Schema({
 	snapshots:[{
 		id: String,
 		created: Date,
-		note: String
+		note: String,
+		type: String,
+		tracks: [{
+			title: String,
+			artist: String,
+			uri: String
+		}],
 	}],
 	track_total: Number,
 });

@@ -54,6 +54,9 @@ angular.module('playlists').controller('PlaylistsController', ['$scope', '$http'
 			 },
 		};
 
+		$scope.revert = function (snap) {
+			console.log(snap);
+		};
 
 		$scope.topArtist = function (currentArtists) {
 			var max = 0;
@@ -65,7 +68,7 @@ angular.module('playlists').controller('PlaylistsController', ['$scope', '$http'
 				}
 			}
 			return artist;
-		}
+		};
 
 		$scope.millisToMinutesAndSeconds = function (millis) {
   		var minutes = Math.floor(millis / 60000);
@@ -342,14 +345,22 @@ angular.module('playlists').controller('PlaylistsController', ['$scope', '$http'
 			$http(req).
 				success(function (res){
 					var addedTracks = [];
+					var track_info = [];
 					for (var k in $scope.tracksToAdd){
+						track_info.push({
+							'title': $scope.tracksToAdd[k].title,
+							'artist': $scope.tracksToAdd[k].artist,
+							'uri': $scope.tracksToAdd[k].uri
+						});
 						var str = $scope.tracksToAdd[k].title + ' by ' + $scope.tracksToAdd[k].artist;
 						addedTracks.push(str);
 					}
 					var snap = {
 						'id': res.snapshot_id,
 						'created': new Date(),
-						'note': 'Added ' + $scope.tracksToAdd.length + ' track(s) (' + addedTracks.join() + ') to ' + $scope.currentPlaylist.name
+						'note': 'Added ' + $scope.tracksToAdd.length + ' track(s) (' + addedTracks.join() + ') to ' + $scope.currentPlaylist.name,
+						'type': 'add',
+						'tracks': track_info
 					};
 					$scope.currentPlaylist.snapshots.push(snap);
 
@@ -409,14 +420,22 @@ angular.module('playlists').controller('PlaylistsController', ['$scope', '$http'
 			$http(req).
 				success(function (res){
 					var deletedTracks = [];
+					var track_info = [];
 					for (var k in $scope.tracksToDelete){
+						track_info.push({
+							'title': $scope.tracksToDelete[k].title,
+							'artist': $scope.tracksToDelete[k].artist,
+							'uri': $scope.tracksToDelete[k].uri
+						});
 						var str = $scope.tracksToDelete[k].title + ' by ' + $scope.tracksToDelete[k].artist;
 						deletedTracks.push(str);
 					}
 					var snap = {
 						'id': res.snapshot_id,
 						'created': new Date(),
-						'note': 'Deleted ' + $scope.tracksToDelete.length + ' track(s) (' + deletedTracks.join() + ') from ' + $scope.currentPlaylist.name
+						'note': 'Deleted ' + $scope.tracksToDelete.length + ' track(s) (' + deletedTracks.join() + ') from ' + $scope.currentPlaylist.name,
+						'type': 'delete',
+						'tracks': track_info
 					};
 					$scope.currentPlaylist.snapshots.push(snap);
 
