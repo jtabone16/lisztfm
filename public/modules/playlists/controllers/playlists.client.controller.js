@@ -27,6 +27,7 @@ angular.module('playlists').controller('PlaylistsController', ['$scope', '$http'
 		$scope.newPlaylistName = '';
 		$scope.queueSelected = undefined;
 		$scope.total_track_length = 0;
+		$scope.currentArtists = [];
 
 
 		$scope.playlist_req = {
@@ -52,6 +53,19 @@ angular.module('playlists').controller('PlaylistsController', ['$scope', '$http'
 				 'Authorization': 'Bearer ' + $window.user.providerData.accessToken
 			 },
 		};
+
+
+		$scope.topArtist = function (currentArtists) {
+			var max = 0;
+			var artist = '';
+			for(var k in currentArtists){
+				if(currentArtists[k] > max) {
+					max = currentArtists[k];
+					artist = k;
+				}
+			}
+			return artist;
+		}
 
 		$scope.millisToMinutesAndSeconds = function (millis) {
   		var minutes = Math.floor(millis / 60000);
@@ -159,6 +173,7 @@ angular.module('playlists').controller('PlaylistsController', ['$scope', '$http'
 						var added_by = '';
 						for (var x in trax[i].track.artists){
 								artist.push(trax[i].track.artists[x].name);
+								$scope.currentArtists[trax[i].track.artists[x].name] = (isNaN($scope.currentArtists[trax[i].track.artists[x].name]) ? 1 : $scope.currentArtists[trax[i].track.artists[x].name] + 1);
 							}
 						if (trax[i].added_by !== null){
 							added_by = trax[i].added_by.id;
@@ -210,6 +225,7 @@ angular.module('playlists').controller('PlaylistsController', ['$scope', '$http'
 				$scope.raw_playlist = plist;
 
 				$scope.total_track_length = 0;
+				$scope.currentArtists = [];
 
 				$scope.currentPlaylist = {
 					'id': plist.id,
