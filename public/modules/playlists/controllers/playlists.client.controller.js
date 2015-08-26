@@ -314,11 +314,6 @@ angular.module('playlists').controller('PlaylistsController', ['$scope', '$http'
 			 var track_uri = $item.uri;
 			 $scope.currentTrack = 'https://embed.spotify.com/?uri=' + track_uri;
 			 var found = false;
-			 var artist = [];
-			//  for (var x in $item.artists){
-			// 		 artist.push($item.artists[x].name);
-			// 	 }
-
 			 for (var i = 0; i < $scope.tracksToAdd.length; i++){
 				 if ($scope.tracksToAdd[i].uri === track_uri){
 					 found = true;
