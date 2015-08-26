@@ -42,7 +42,7 @@ exports.addPlaylist = function(req, res){
 				}
 				else{
 					//Update snapshots and other relevant playlist info
-					plist.snapshots.push.apply(plist.snapshots, playlist.snapshots);
+					plist.snapshots = playlist.snapshots;
 					plist.save(function(err) {
 						if (err) {
 							console.log('DB: error adding playlist');
