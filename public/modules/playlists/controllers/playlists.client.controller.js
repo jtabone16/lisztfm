@@ -103,6 +103,7 @@ angular.module('playlists').controller('PlaylistsController', ['$scope', '$http'
 
 
 		$scope.getSearchResults = function ($viewValue){
+				$scope.search_results = [];
 				$scope.search_req = {
 					 method: 'GET' ,
 					 url: 'https://api.spotify.com/v1/search?q=' + $viewValue.split('%20') + '&type=' + $scope.search_type,
@@ -114,8 +115,24 @@ angular.module('playlists').controller('PlaylistsController', ['$scope', '$http'
 
 				return $http($scope.search_req).
 					then(function (res){
-						$scope.search_results = res.data.tracks.items;
-						console.log(res);
+						var results = res.data.tracks.items;
+						for (var i in results){
+							var track = {
+								'name': results[i].name,
+								'artists': '',
+								'uri': results[i].uri
+							};
+							var num_artists = results[i].artists.length;
+							var counter = 0;
+							for (var j in results[i].artists){
+								track.artists += results[i].artists[j].name;
+								counter++;
+								if (counter !== num_artists){
+									track.artists += ', ';
+								}
+							}
+							$scope.search_results.push(track);
+						}
 						return $scope.search_results;
 					});
 
@@ -298,9 +315,9 @@ angular.module('playlists').controller('PlaylistsController', ['$scope', '$http'
 			 $scope.currentTrack = 'https://embed.spotify.com/?uri=' + track_uri;
 			 var found = false;
 			 var artist = [];
-			 for (var x in $item.artists){
-					 artist.push($item.artists[x].name);
-				 }
+			//  for (var x in $item.artists){
+			// 		 artist.push($item.artists[x].name);
+			// 	 }
 
 			 for (var i = 0; i < $scope.tracksToAdd.length; i++){
 				 if ($scope.tracksToAdd[i].uri === track_uri){
@@ -313,7 +330,7 @@ angular.module('playlists').controller('PlaylistsController', ['$scope', '$http'
 			 if (found === false){
 				 var trak = {
 					 'uri': track_uri,
-					 'artist': artist.join(),
+					 'artist': $item.artists,
 					 'title': $item.name,
 					 'added': new Date(),
 					 'added_by': $scope.currentUser.username,

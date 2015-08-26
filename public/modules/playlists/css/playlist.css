@@ -83,6 +83,10 @@
 	text-transform: lowercase;
 }
 
+.dropdown-menu li{
+	background: rgba(0, 0, 0, 0.5) !important;
+}
+
 .table-title {
 	/*width: 30%;*/
 	text-align: center;
